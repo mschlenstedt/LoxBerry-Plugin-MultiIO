@@ -23,7 +23,7 @@
               "class": "logging.FileHandler",
               "formatter": "loxberry",
               "level": "DEBUG",
-              "filename": "/tmp/testlog.log"
+              "filename": "/tmp/multiio.log"
           }
       },
       "loggers": {
