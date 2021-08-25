@@ -1,0 +1,41 @@
+{
+   "mqtt" : {
+      "topic_prefix" : "multiio"
+   },
+   "logging": {
+      "formatters": {
+          "simple": {
+              "format": "%(asctime)s %(name)s (%(levelname)s): %(message)s"
+          },
+          "loxberry": {
+              "format": "%(asctime)s.%(msecs)03d <%(levelname)s> %(message)s",
+	      "datefmt": "%H:%M:%S"
+          }
+      },
+      "handlers": {
+          "console": {
+              "class": "logging.StreamHandler",
+              "formatter": "simple",
+              "level": "DEBUG",
+              "stream": "ext://sys.stderr"
+          },
+          "file": {
+              "class": "logging.FileHandler",
+              "formatter": "loxberry",
+              "level": "DEBUG",
+              "filename": "/tmp/testlog.log"
+          }
+      },
+      "loggers": {
+          "mqtt_gpio": {
+              "handlers": [
+                  "console",
+		  "file"
+              ],
+              "level": "INFO",
+              "propagate": true
+          }
+      },
+      "version": 1
+   }
+}
