@@ -3,4 +3,4 @@ import json
 import sys
 import yaml
 
-sys.stdout.write(yaml.dump(json.load(sys.stdin),sort_keys=False))
+sys.stdout.write(yaml.dump(json.load(sys.stdin),sort_keys=False,default_flow_style=False))
