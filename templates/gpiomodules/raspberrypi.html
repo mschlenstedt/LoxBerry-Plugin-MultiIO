@@ -1,7 +1,8 @@
 <div data-role="popup" id="popup_gpio_module_raspberrypi" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
+	<form id="form_raspberrypi">
 		<h3 class="boxtitle ui-title">
 			<span style="vertical-align:middle"><img src="./images/chip_title_32.png"></span>
-			<TMPL_VAR GPIOS.LABEL_ADD_GPIOMODULE>: raspberrypi
+			<TMPL_VAR GPIOS.LABEL_TITLE_GPIOMODULE>: raspberrypi
 		</h3>
 
 		<div class="box">
@@ -17,8 +18,8 @@
 					<div class="boxitem small" style="width: 90%">
 						<input type="hidden" id="edit_raspberrypi" value="">
 						<input type="hidden" id="module_raspberrypi" value="raspberrypi">
-						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
 						<a href="#" onclick="add_gpiomodule('raspberrypi'); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_SAVE"></a>
+						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
 					</div>
 			</div>
 			<div class="boxrow">
@@ -27,5 +28,6 @@
 					</div>
 			</div>
 		</div>
+	</form>
 </div>
 

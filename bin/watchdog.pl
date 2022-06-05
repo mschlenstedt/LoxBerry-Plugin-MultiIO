@@ -112,7 +112,7 @@ sub start
 	# MQTT
 	my $mqtt = LoxBerry::IO::mqtt_connectiondetails();
 	$cfg->{'mqtt'}->{'host'} = $mqtt->{'brokerhost'};
-	my $brokerport = $mqtt->{'brokerport'} + 0.1 - 0.1;
+	my $brokerport = $mqtt->{'brokerport'} + 0.1 - 0.1; # Convert to int
 	$cfg->{'mqtt'}->{'port'} = $brokerport;
 	$cfg->{'mqtt'}->{'user'} = $mqtt->{'brokeruser'} if ($mqtt->{'brokeruser'});
 	$cfg->{'mqtt'}->{'password'} = $mqtt->{'brokerpass'} if ($mqtt->{'brokerpass'});

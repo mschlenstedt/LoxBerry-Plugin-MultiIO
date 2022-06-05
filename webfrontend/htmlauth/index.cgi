@@ -119,6 +119,30 @@ sub form_gpios
 			$options .= "<option value='$_'>$_</option>";
 		}
 	}
+	
+	# Read DIGITALOUTPUT templates
+	opendir(my $fh,"$lbptemplatedir/digitaloutputs");
+	my @files = readdir($fh);
+	close $fh;
+
+	foreach (@files) {
+		if ( $_ =~ /.*\.html/ ) {
+			$template = $template .= LoxBerry::System::read_file("$lbptemplatedir/digitaloutputs/$_");
+			$_ =~ s/\.html//g;
+		}
+	}
+	
+	# Read DIGITALINPUT templates
+	opendir(my $fh,"$lbptemplatedir/digitalinputs");
+	my @files = readdir($fh);
+	close $fh;
+
+	foreach (@files) {
+		if ( $_ =~ /.*\.html/ ) {
+			$template = $template .= LoxBerry::System::read_file("$lbptemplatedir/digitalinputs/$_");
+			$_ =~ s/\.html//g;
+		}
+	}
 
 	# Prepare template
 	&preparetemplate();
@@ -157,7 +181,7 @@ sub preparetemplate
 {
 
 	# Add JS Scripts
-	my $templatefile = "$lbptemplatedir/javascript.html";
+	my $templatefile = "$lbptemplatedir/javascript.js";
 	$template .= LoxBerry::System::read_file($templatefile);
 
 	$templateout = HTML::Template->new_scalar_ref(

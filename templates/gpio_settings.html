@@ -151,7 +151,24 @@
 			<TMPL_VAR "GPIOS.LABEL_INPUTS">
 		</h2>
 		<div class="box">
-			Blah
+			<div class="boxrow">
+					<div class="boxitem small">
+						<TMPL_VAR "INPUTS.LABEL_ADD_DIGITALINPUT">
+					</div>
+					<div class="boxitem" style="width:200px">
+							<select name="digitalinput_module" id="digitalinput_module" data-mini="true">
+							</select>
+					</div>
+					<div class="boxitem">
+							<a href="#" onclick="popup_add_digitalinput(); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-plus ui-corner-all"><TMPL_VAR "COMMON.BUTTON_ADD"></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem" style="width:500px">
+						<!-- Table -->
+						<div id="digitalinputs-list"></div>
+					</div>
+			</div>
 		</div>
 	</div>
 	<div>
@@ -160,7 +177,24 @@
 			<TMPL_VAR "GPIOS.LABEL_OUTPUTS">
 		</h2>
 		<div class="box">
-			Blah
+			<div class="boxrow">
+					<div class="boxitem small">
+						<TMPL_VAR "OUTPUTS.LABEL_ADD_DIGITALOUTPUT">
+					</div>
+					<div class="boxitem" style="width:200px">
+							<select name="digitaloutput_module" id="digitaloutput_module" data-mini="true">
+							</select>
+					</div>
+					<div class="boxitem">
+							<a href="#" onclick="popup_add_digitaloutput(); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-plus ui-corner-all"><TMPL_VAR "COMMON.BUTTON_ADD"></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem" style="width:500px">
+						<!-- Table -->
+						<div id="digitaloutputs-list"></div>
+					</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -192,6 +226,32 @@
 			<div class="boxrow">
 					<div class="boxitem small" style="width: 90%">
 						<span id="deletegpiomodulehint">&nbsp;</span>
+					</div>
+			</div>
+		</div>
+</div>
+
+<div data-role="popup" id="popup_delete_digital_output" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
+		<h3 class="boxtitle ui-title">
+			<TMPL_VAR OUTPUTS.LABEL_DELETE_DIGITALOUTPUT>?
+		</h3>
+
+		<div class="box">
+			<div class="boxrow">
+					<div class="boxitem">
+						<TMPL_VAR OUTPUTS.HINT_DELETE_DIGITALOUTPUT_1> <b><span id="deletedigitaloutputname">&nbsp;</span></b> <TMPL_VAR OUTPUTS.HINT_DELETE_DIGITALOUTPUT_2>	
+					</div>
+			</div>
+			<br>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
+						<a href="#" onclick="delete_digitaloutput(); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_DELETE"></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<span id="deletedigitaloutputhint">&nbsp;</span>
 					</div>
 			</div>
 		</div>
