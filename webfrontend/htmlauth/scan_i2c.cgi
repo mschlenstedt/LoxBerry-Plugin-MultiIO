@@ -52,7 +52,7 @@ for (my $i=0; $i < 10; $i++) {
 		$buslist .= $busses eq "0" ? "i2c-$i" : ", i2c-$i";
 		$busses++;
 		my %html;
-		my ($rc, $output) = execute( command => "sudo i2cdetect -y $i" );
+		my ($rc, $output) = execute( command => "i2cdetect -y $i" );
 		if ($rc eq "0") {
 			$html{'BUS'} = $i;
 			$html{'OUTPUT'} = $output;

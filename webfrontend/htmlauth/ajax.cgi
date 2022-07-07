@@ -30,9 +30,9 @@ if( $q->{action} eq "servicerestart" ) {
 
 if( $q->{action} eq "servicestatus" ) {
 	my $status;
-	my $count = `pgrep -c -f "python3 -m pi_mqtt_gpio.server /dev/shm/mqttio.yaml"`;
+	my $count = `pgrep -c -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
 	if ($count >= "2") {
-		$status = `pgrep -o -f "python3 -m pi_mqtt_gpio.server /dev/shm/mqttio.yaml"`;
+		$status = `pgrep -o -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
 	}
 	my %response = (
 		pid => $status,
@@ -127,6 +127,10 @@ if( $q->{action} eq "deletegpiomodule" ) {
 	@searchresult = $jsonobj->find( $cfg->{'digital_outputs'}, "\$_->{'module'} eq \"" . $q->{'name'} . "\"" );
 	for my $elemKey (reverse sort @searchresult) {
 		splice @{ $cfg->{'digital_outputs'} }, $elemKey, 1 if (defined($elemKey));
+	}
+	@searchresult = $jsonobj->find( $cfg->{'digital_inputs'}, "\$_->{'module'} eq \"" . $q->{'name'} . "\"" );
+	for my $elemKey (reverse sort @searchresult) {
+		splice @{ $cfg->{'digital_inputs'} }, $elemKey, 1 if (defined($elemKey));
 	}
 	$jsonobj->write();
 	$response = encode_json( $cfg );

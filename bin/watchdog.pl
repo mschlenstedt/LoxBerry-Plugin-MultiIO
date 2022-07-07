@@ -90,15 +90,16 @@ sub start
 {
 
 	$log->default;
-	my $count = `pgrep -c -f "python3 -m pi_mqtt_gpio.server /dev/shm/mqttio.yaml"`;
+	my $count = `pgrep -c -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
 	chomp ($count);
-	$count--; # Perl `` itself runs pgrep with sh, which also match -f in pgrep
+	$count--; # Perl itself runs pgrep with sh, which also match -f in pgrep
 	if ($count > "0") {
 		LOGCRIT "MQTT IO already running. Please stop it before starting again. Exiting.";
 		exit (1);
 	}
 
 	# Change config on the fly and convert to yaml for mqtt-io
+	system ("rm /dev/shm/mqttio.yaml > /dev/null 2>&1");
 	system ("cp $lbpconfigdir/mqttio.json /dev/shm > /dev/null 2>&1");
 	system ("chmod 600 /dev/shm/mqttio.json > /dev/null 2>&1");
 	my $cfgfile ="/dev/shm/mqttio.json";
@@ -123,6 +124,9 @@ sub start
 		logdir => "$lbplogdir",
 		addtime => 1,
 	);
+	if ($verbose) {
+		$mqttiolog->loglevel(7);
+	}
 	my $logfile = $mqttiolog->filename();
 	#my $logfile = $mqttiolog->close();
 	$cfg->{'logging'}->{'handlers'}->{'file'}->{'filename'} = $logfile;
@@ -141,11 +145,14 @@ sub start
 
 	# Convert to YAML
 	system ("cat /dev/shm/mqttio.json | $lbpbindir/helpers/json2yaml.py > /dev/shm/mqttio.yaml");
+	system ("sed -i -e \"s#\\(.*:.*\\)'\\([[:alnum:]_-]*\\)'#\\1\\2#g\" /dev/shm/mqttio.yaml");
+	system ("sed -i -e \"s#\\(.*:.*\\)ON#\\1'ON'#g\" /dev/shm/mqttio.yaml"); # ON/OFF are always strings
+	system ("sed -i -e \"s#\\(.*:.*\\)OFF#\\1'OFF'#g\" /dev/shm/mqttio.yaml"); # ON/OFF are always strings
 	system ("chmod 600 /dev/shm/mqttio.yaml > /dev/null 2>&1");
 	unlink ("/dev/shm/mqttio.json");
 
 	if (!-e "/dev/shm/mqttio.yaml") {
-		LOGCRIT "Cannot create yaml config file /dev/shm/mqttio.json. Exiting.";
+		LOGCRIT "Cannot create yaml config file /dev/shm/mqttio.yaml. Exiting.";
 		exit (1);
 	}
 
@@ -153,18 +160,18 @@ sub start
 
 	$mqttiolog->default;
 	LOGSTART "Starting MQTT IO...";
-	system ("python3 -m pi_mqtt_gpio.server /dev/shm/mqttio.yaml > /dev/null 2>&1 &");
+	system ("python3 -m mqtt_io /dev/shm/mqttio.yaml >> $logfile 2>&1 &");
 	sleep 2;
 
-	my $count = `pgrep -c -f "python3 -m pi_mqtt_gpio.server /dev/shm/mqttio.yaml"`;
+	my $count = `pgrep -c -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
 	chomp ($count);
-	$count--; # Perl `` itself runs pgrep with sh, which also match -f in pgrep
+	$count--; # Perl itself runs pgrep with sh, which also match -f in pgrep
 	$log->default;
 	if ($count eq "0") {
 		LOGCRIT "Could not start MQTT IO. Error: $?";
 		exit (1)
 	} else {
-		my $status = `pgrep -o -f "python3 -m pi_mqtt_gpio.server /dev/shm/mqttio.yaml"`;
+		my $status = `pgrep -o -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
 		chomp ($status);
 		LOGOK "MQTT IO started successfully. Running PID: $status";
 	}
@@ -178,23 +185,23 @@ sub stop
 
 	$log->default;
 	LOGINF "Stopping MQTT IO...";
-	system ('pkill -f "python3 -m pi_mqtt_gpio.server /dev/shm/mqttio.yaml" > /dev/null 2>&1');
+	system ('pkill -f "python3 -m mqtt_io /dev/shm/mqttio.yaml" > /dev/null 2>&1');
 	sleep 2;
 
-	my $count = `pgrep -c -f "python3 -m pi_mqtt_gpio.server /dev/shm/mqttio.yaml"`;
+	my $count = `pgrep -c -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
 	chomp ($count);
 	$count--; # Perl `` itself runs pgrep with sh, which also match -f in pgrep
 	if ($count eq "0") {
 		LOGOK "MQTT IO stopped successfully.";
 	} else {
-		my $status = `pgrep -o -f "python3 -m pi_mqtt_gpio.server /dev/shm/mqttio.yaml"`;
+		my $status = `pgrep -o -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
 		chomp ($status);
 		LOGCRIT "Could not stop MQTT IO. Running PID: $status";
 		exit (1)
 	}
 
 	# Remove temporary config file
-	if (!-e "/dev/shm/mqttio.yaml") {
+	if (-e "/dev/shm/mqttio.yaml") {
 		unlink ("/dev/shm/mqttio.yaml");
 	}
 
@@ -226,7 +233,7 @@ sub check
 		my $response = LoxBerry::System::write_file("/dev/shm/multiio-watchdog-fails.dat", "0");
 	}
 
-	my $count = `pgrep -c -f "python3 -m pi_mqtt_gpio.server /dev/shm/mqttio.yaml"`;
+	my $count = `pgrep -c -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
 	chomp ($count);
 	$count--; # Perl `` itself runs pgrep with sh, which also match -f in pgrep
 	if ($count eq "0") {
@@ -241,79 +248,12 @@ sub check
 			&restart();
 		}
 	} else {
-		my $status = `pgrep -o -f "python3 -m pi_mqtt_gpio.server /dev/shm/mqttio.yaml"`;
+		my $status = `pgrep -o -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
 		chomp ($status);
 		LOGOK "MQTT IO is running. Fine. Running PID: $status";
 		my $response = LoxBerry::System::write_file("/dev/shm/multiio-watchdog-fails.dat", "0");
 	}
 
 	return(0);
-
-}
-
-##
-## Read available busses
-##
-sub readbusses
-{
-
-	# Connect to OWServer
-	$error = owconnect();
-	if ($error) {
-		LOGERR "Error while connecting to OWServer.";
-		exit(1);
-	}
-
-	LOGINF "Scanning for busses...";
-	my $busses;
-	
-	# Scan for busses
-	eval {
-		$busses = $owserver->dir("/");
-	};
-	if ($@ || !$busses) {
-		my $error = $@ || 'Unknown failure';
-        	LOGERR "An error occurred - $error Busses: $busses";
-		exit (1);
-	};
-	LOGDEB "OWServer Root Folder: $busses";
-	
-	# Set default values
-	my @temp = split(/,/,$busses);
-	for (@temp) {
-		if ( $_ =~ /^\/bus.*$/ ) {
-			LOGDEB "Found Bus $_";
-			push (@busses, $_),
-		}
-	}
-
-	return();
-
-};
-
-##
-## Connect to OWServer
-##
-sub owconnect
-{
-	eval {
-		$owserver = OWNet->new('localhost:' . $owfscfg->{"serverport"} . " -v -" .$owfscfg->{"tempscale"} );
-	};
-	if ($@ || !$owserver) {
-		my $error = $@ || 'Unknown failure';
-        	LOGERR "An error occurred - $error";
-		exit (1);
-	};
-	return($error);
-
-};
-
-##
-## Always execute when Script ends
-##
-END {
-
-	LOGEND "This is the end - My only friend, the end...";
-	LoxBerry::System::unlock(lockfile => '1-wire-ng-watchdog');
 
 }
