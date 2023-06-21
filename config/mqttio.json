@@ -1,41 +1,44 @@
 {
+   "digital_inputs" : [],
+   "digital_outputs" : [],
+   "gpio_modules" : [],
+   "logging" : {
+      "formatters" : {
+         "loxberry" : {
+            "datefmt" : "%H:%M:%S",
+            "format" : "%(asctime)s.%(msecs)03d <%(levelname)s> %(message)s"
+         },
+         "simple" : {
+            "format" : "%(asctime)s %(name)s (%(levelname)s): %(message)s"
+         }
+      },
+      "handlers" : {
+         "console" : {
+            "class" : "logging.StreamHandler",
+            "formatter" : "simple",
+            "level" : "DEBUG",
+            "stream" : "ext://sys.stderr"
+         },
+         "file" : {
+            "class" : "logging.FileHandler",
+            "filename" : "/tmp/multiio.log",
+            "formatter" : "loxberry",
+            "level" : "DEBUG"
+         }
+      },
+      "loggers" : {
+         "mqtt_io" : {
+            "handlers" : [
+               "console",
+               "file"
+            ],
+            "level" : "INFO",
+            "propagate" : true
+         }
+      },
+      "version" : 1
+   },
    "mqtt" : {
       "topic_prefix" : "multiio"
-   },
-   "logging": {
-      "formatters": {
-          "simple": {
-              "format": "%(asctime)s %(name)s (%(levelname)s): %(message)s"
-          },
-          "loxberry": {
-              "format": "%(asctime)s.%(msecs)03d <%(levelname)s> %(message)s",
-	      "datefmt": "%H:%M:%S"
-          }
-      },
-      "handlers": {
-          "console": {
-              "class": "logging.StreamHandler",
-              "formatter": "simple",
-              "level": "DEBUG",
-              "stream": "ext://sys.stderr"
-          },
-          "file": {
-              "class": "logging.FileHandler",
-              "formatter": "loxberry",
-              "level": "DEBUG",
-              "filename": "/tmp/multiio.log"
-          }
-      },
-      "loggers": {
-          "mqtt_gpio": {
-              "handlers": [
-                  "console",
-		  "file"
-              ],
-              "level": "INFO",
-              "propagate": true
-          }
-      },
-      "version": 1
    }
 }

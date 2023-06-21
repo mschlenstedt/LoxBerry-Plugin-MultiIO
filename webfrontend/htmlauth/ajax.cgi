@@ -182,8 +182,8 @@ if( $q->{action} eq "digitaloutput" ) {
 		# Optional
 		$digitaloutput{'timed_ms'} = $q->{'timed_ms'} if ($q->{'timed_ms'} > 0);
 		$digitaloutput{'initial'} = $q->{'initial'} if ($q->{'initial'});
-		$digitaloutput{'payload_on'} = $q->{'payload_on'} ne "ON" ? $q->{'payload_on'} : "ON";
-		$digitaloutput{'payload_off'} = $q->{'payload_off'} ne "OFF" ? $q->{'payload_off'} : "OFF";
+		$digitaloutput{'on_payload'} = $q->{'payload_on'} ne "ON" ? $q->{'payload_on'} : "ON";
+		$digitaloutput{'off_payload'} = $q->{'payload_off'} ne "OFF" ? $q->{'payload_off'} : "OFF";
 		$digitaloutput{'inverted'} = $q->{'inverted'};
 
 		# Save
@@ -215,15 +215,95 @@ if( $q->{action} eq "deletedigitaloutput" ) {
 	
 }
 
+if( $q->{action} eq "digitalinput" ) {
 
+	# Check if all required parameters are defined
+	if (!defined $q->{'name'} || $q->{'name'} eq "") {
+		$error = "Name cannot be empty";
+	}
+	if (!defined $q->{'module'} || $q->{'module'} eq "") {
+		$error = "Module cannot be empty";
+	}
+	if (!defined $q->{'pin'} || $q->{'pin'} eq "") {
+		$error = "Pin cannot be empty";
+	}
 
+	# Load config
+	require LoxBerry::JSON;
+	my $cfgfile = "$lbpconfigdir/mqttio.json";
+	my $jsonobj = LoxBerry::JSON->new();
+	my $cfg = $jsonobj->open(filename => $cfgfile);
+	# Check if name already exists
+	if ( !$q->{'edit'} && $q->{'name'} ) {
+		my @searchresult = $jsonobj->find( $cfg->{'digital_inputs'}, "\$_->{'name'} eq \"" . $q->{'name'} . "\"" );
+		#my $elemKey = $searchresult[0];
+		if (scalar(@searchresult) > 0) {
+			$error = "Name '" . $q->{'name'} . "' already exists. Names must be unique.";
+		}
+	}
+	# Edit existing output
+	if (!$error && $q->{'edit'}) {
+		my @searchresult = $jsonobj->find( $cfg->{'digital_inputs'}, "\$_->{'name'} eq \"" . $q->{'edit'} . "\"" );
+		my $elemKey = $searchresult[0];
+		splice @{ $cfg->{'digital_inputs'} }, $elemKey, 1 if (defined($elemKey));
+	}
+	# Add new/edited output
+	if (!$error) {
+		# Required
+		my %digitalinput = (
+			name => $q->{'name'},
+			module => $q->{'module'},
+			pin => $q->{'pin'},
+			retain => 'true',
+		);
+		# Optional
+		$digitalinput{'on_payload'} = $q->{'payload_on'} ne "ON" ? $q->{'payload_on'} : "ON";
+		$digitalinput{'off_payload'} = $q->{'payload_off'} ne "OFF" ? $q->{'payload_off'} : "OFF";
+		$digitalinput{'inverted'} = $q->{'inverted'};
+		$digitalinput{'pullup'} = "true" if ($q->{'resistor'} eq "pullup");
+		$digitalinput{'pulldown'} = "true" if ($q->{'resistor'} eq "pulldown");
+		$digitalinput{'bouncetime'} = $q->{'bouncetime'} if ($q->{'bouncetime'} > 0);
+		$digitalinput{'interrupt'} = $q->{'interrupt'} if ($q->{'interrupt'} ne "none" );
+		$digitalinput{'poll_interval'} = $q->{'pollinterval'} if ($q->{'pollinterval'} > 0);
+		$digitalinput{'poll_when_interrupt_for'} = "true" if ($q->{'pollinterval'} > 0 && $q->{'interruptfor'} && $q->{'interruptfor'} ne "none" );
+		my @interruptsfor;
+		if ($q->{'interruptfor'} && $q->{'interruptfor'} ne "none") {
+			my @searchresultintfor = $jsonobj->find( $cfg->{'digital_inputs'}, "\$_->{'module'} eq \"" . $q->{'interruptfor'} . "\"" );
+			foreach (@searchresultintfor) {
+				print STDERR $cfg->{'digital_inputs'}[$_]->{'name'} . "\n";
+				push @interruptsfor, $cfg->{'digital_inputs'}[$_]->{'name'};
+			}
+			$digitalinput{'interrupt_for'} = \@interruptsfor;
+		}
 
+		# Save
+		push @{$cfg->{'digital_inputs'}}, \%digitalinput;
+		$jsonobj->write();
+	}
+	$response = encode_json( $cfg );
+	
+}
 
+if( $q->{action} eq "deletedigitalinput" ) {
 
+	# Check if all required parameters are defined
+	if (!defined $q->{'name'} || $q->{'name'} eq "") {
+		$error = "Name cannot be empty";
+	}
 
-
-
-
+	# Load config
+	require LoxBerry::JSON;
+	my $cfgfile = "$lbpconfigdir/mqttio.json";
+	my $jsonobj = LoxBerry::JSON->new();
+	my $cfg = $jsonobj->open(filename => $cfgfile);
+	# Delete existing output
+	my @searchresult = $jsonobj->find( $cfg->{'digital_inputs'}, "\$_->{'name'} eq \"" . $q->{'name'} . "\"" );
+	my $elemKey = $searchresult[0];
+	splice @{ $cfg->{'digital_inputs'} }, $elemKey, 1 if (defined($elemKey));
+	$jsonobj->write();
+	$response = encode_json( $cfg );
+	
+}
 
 #####################################
 # Manage Response and error

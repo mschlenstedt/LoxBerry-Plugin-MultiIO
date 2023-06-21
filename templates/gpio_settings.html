@@ -257,3 +257,28 @@
 		</div>
 </div>
 
+<div data-role="popup" id="popup_delete_digital_input" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
+		<h3 class="boxtitle ui-title">
+			<TMPL_VAR INPUTS.LABEL_DELETE_DIGITALINPUT>?
+		</h3>
+
+		<div class="box">
+			<div class="boxrow">
+					<div class="boxitem">
+						<TMPL_VAR INPUTS.HINT_DELETE_DIGITALINPUT_1> <b><span id="deletedigitalinputname">&nbsp;</span></b> <TMPL_VAR INPUTS.HINT_DELETE_DIGITALINPUT_2>	
+					</div>
+			</div>
+			<br>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
+						<a href="#" onclick="delete_digitalinput(); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_DELETE"></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<span id="deletedigitalinputhint">&nbsp;</span>
+					</div>
+			</div>
+		</div>
+</div>

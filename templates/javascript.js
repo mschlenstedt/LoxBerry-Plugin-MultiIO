@@ -278,8 +278,8 @@ function popup_edit_digitaloutput(digitaloutputname) {
 				$("#name_digitaloutput_" + module).val(item.name);
 				$("#gpiomodule_digitaloutput_" + module).val(item.module);
 				$("#pin_digitaloutput_" + module).val(item.pin).selectmenu('refresh',true);
-				$("#payload_on_digitaloutput_" + module).val(item.payload_on);
-				$("#payload_off_digitaloutput_" + module).val(item.payload_off);
+				$("#payload_on_digitaloutput_" + module).val(item.on_payload);
+				$("#payload_off_digitaloutput_" + module).val(item.off_payload);
 				if ( item.inverted == "true" ) {
 					$("#inverted_digitaloutput_" + module).prop('checked', true).checkboxradio('refresh');
 				} else {
@@ -431,19 +431,22 @@ function popup_add_digitalinput() {
 	})
 	.done(function( data ) {
 		console.log( "popup_add_digitalinput Success", data );
-		inputs = data.digital_inputs;
-		if ( data.error || jQuery.isEmptyObject(inputs)) {
-			inputs = undefined;
-			$("#inputlist_digitalinput_" + module).html('<TMPL_VAR "INPUTS.HINT_NO_INPUTS">');
+		nmodules = data.gpio_modules;
+		if ( data.error || jQuery.isEmptyObject(modules)) {
+			modules = undefined;
+			$("#moduleslist_digitalinput_" + module).html('<TMPL_VAR "INPUTS.HINT_NO_MODULES">');
 		} else {
-			$('#inputlist_digitalinput_' + module).controlgroup('container').empty();
-			$.each( inputs, function( intDevId, item){
-				$('#inputlist_digitalinput_' + module)
-				.controlgroup("container")
-				.append('<input type="checkbox" name="interrupt_for_' + module + '" id="int_input_'  + item.name + '_' + module + '" value="' + item.name + '" data-mini="true">')
-				.append('<label for="int_input_'  + item.name + '_' + module + '">' + item.name + ' (' + item.module + ')</label>');
+			var select = $("<select id='interruptfor_digitalinput_" + module + "' name='interruptfor_digitalinput_" + module + "' data-mini='true'>");
+			select.append($("<option value='none'><TMPL_VAR 'COMMON.LABEL_NONE'></option>"));
+			$.each( modules, function( intDevId, item){
+				if (item.module == module) {
+					return;
+				}
+				select.append($("<option value='" + item.name + "'>" + item.name + "</option>"));
 			});
-			$('#inputlist_digitalinput_' + module).enhanceWithin().controlgroup("refresh");
+			$('#moduleslist_digitalinput_' + module).html(select);
+			$('#interruptfor_digitalinput_' + module).selectmenu();
+			$('#interruptfor_digitalinput_' + module).selectmenu("refresh", true);
 		};
 	})
 	.always(function( data ) {
@@ -472,7 +475,6 @@ function popup_edit_digitalinput(digitalinputname) {
 	})
 	.done(function( data ) {
 		console.log( "edit_digitalinput Success", data );
-
 		inputs = data.digital_inputs;
 		if ( data.error || jQuery.isEmptyObject(inputs)) {
 			outputs = undefined;
@@ -497,18 +499,53 @@ function popup_edit_digitalinput(digitalinputname) {
 				$("#name_digitalinput_" + module).val(item.name);
 				$("#gpiomodule_digitalinput_" + module).val(item.module);
 				$("#pin_digitalinput_" + module).val(item.pin).selectmenu('refresh',true);
-				$("#payload_on_digitalinput_" + module).val(item.payload_on);
-				$("#payload_off_digitalinput_" + module).val(item.payload_off);
+				$("#payload_on_digitalinput_" + module).val(item.on_payload);
+				$("#payload_off_digitalinput_" + module).val(item.off_payload);
 				if ( item.inverted == "true" ) {
 					$("#inverted_digitalinput_" + module).prop('checked', true).checkboxradio('refresh');
 				} else {
 					$("#inverted_digitalinput_" + module).prop('checked', false).checkboxradio('refresh');
 				}
-				$("#resistor_digitalinput_" + module).val(item.initial).selectmenu('refresh',true);
-				$("#interrupt_digitalinput_" + module).val(item.timed_ms);
-				$("#pollinterval_digitalinput_" + module).val(item.pin).selectmenu('refresh',true);
-				$("#ibouncetime_digitalinput_" + module).val(item.pin).selectmenu('refresh',true);
+				if ( item.pullup == "true" ) {
+					$("#resistor_digitalinput_" + module).val('pullup').selectmenu('refresh',true);
+				} else if ( item.pulldown == "true" ) {
+					$("#resistor_digitalinput_" + module).val('pulldown').selectmenu('refresh',true);
+				} else {
+					$("#resistor_digitalinput_" + module).val('none').selectmenu('refresh',true);
+				}
+				if ( item.interrupt ) {
+					$("#interrupt_digitalinput_" + module).val(item.interrupt).selectmenu('refresh',true);
+				} else {
+					$("#interrupt_digitalinput_" + module).val("none").selectmenu('refresh',true);
+				}
+				$("#pollinterval_digitalinput_" + module).val(item.poll_interval);
+				$("#bouncetime_digitalinput_" + module).val(item.bouncetime);
 				$("#edit_digitalinput_" + module).val(item.name);
+				var select = $("<select id='interruptfor_digitalinput_" + module + "' name='interruptfor_digitalinput_" + module + "' data-mini='true'>");
+				select.append($("<option value='none'><TMPL_VAR 'COMMON.LABEL_NONE'></option>"));
+				$.each( modules, function( intDevId, item){
+					if (item.module == module) {
+						return;
+					}
+					select.append($("<option value='" + item.name + "'>" + item.name + "</option>"));
+				});
+				$('#moduleslist_digitalinput_' + module).html(select);
+				$('#interruptfor_digitalinput_' + module).selectmenu();
+				if ( item.interrupt_for ) {
+					var moduleint;
+					firstinput = item.interrupt_for[0];
+					$.each( inputs, function( intDevId, itemint){
+						if ( itemint.name == firstinput ) {
+							moduleint = itemint.module;
+							return;
+						}
+					});
+				}
+				if ( moduleint ) {
+					$('#interruptfor_digitalinput_' + module).val(moduleint).selectmenu("refresh", true);
+				} else {
+					$('#interruptfor_digitalinput_' + module).val("none").selectmenu("refresh", true);
+				}
 				// Open Popup
 				$("#savinghint_digitalinput_" + module).html('&nbsp;');
 				$("#popup_digitalinput_" + module ).popup( "open" );
@@ -521,30 +558,9 @@ function popup_edit_digitalinput(digitalinputname) {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ADD/EDIT DIGITAL INPUT (save to config)
 
-function add_digitaloutput(module) {
+function add_digitalinput(module) {
 
 	//var checkboxvalues = [];
 	//jQuery("input[name='checkbox']").each(function() {
@@ -552,8 +568,8 @@ function add_digitaloutput(module) {
 	//});
 	//test: countries.join(", "),
 
-	$("#savinghint_digitaloutput_" + module).attr("style", "color:blue").html("<TMPL_VAR "COMMON.HINT_SAVING">");
-	if ( $("#inverted_digitaloutput_" + module).is(":checked") ) {
+	$("#savinghint_digitalinput_" + module).attr("style", "color:blue").html("<TMPL_VAR "COMMON.HINT_SAVING">");
+	if ( $("#inverted_digitalinput_" + module).is(":checked") ) {
 		invertedchecked = "true";
 	} else {
 		invertedchecked = "false";
@@ -562,99 +578,91 @@ function add_digitaloutput(module) {
 			url:  'ajax.cgi',
 			type: 'POST',
 			data: { 
-				action: 'digitaloutput',
-				name: $("#name_digitaloutput_" + module).val(),
-				module: $("#gpiomodule_digitaloutput_" + module).val(),
-				pin: $("#pin_digitaloutput_" + module).val(),
-				payload_on: $("#payload_on_digitaloutput_" + module).val(),
-				payload_off: $("#payload_off_digitaloutput_" + module).val(),
+				action: 'digitalinput',
+				name: $("#name_digitalinput_" + module).val(),
+				module: $("#gpiomodule_digitalinput_" + module).val(),
+				pin: $("#pin_digitalinput_" + module).val(),
+				payload_on: $("#payload_on_digitalinput_" + module).val(),
+				payload_off: $("#payload_off_digitalinput_" + module).val(),
 				inverted: invertedchecked,
-				initial: $("#initial_digitaloutput_" + module).val(),
-				timed_ms: $("#timed_ms_digitaloutput_" + module).val(),
-				edit: $("#edit_digitaloutput_" + module).val(),
+				resistor: $("#resistor_digitalinput_" + module).val(),
+				bouncetime: $("#bouncetime_digitalinput_" + module).val(),
+				pollinterval: $("#pollinterval_digitalinput_" + module).val(),
+				interrupt: $("#interrupt_digitalinput_" + module).val(),
+				interruptfor: $("#interruptfor_digitalinput_" + module).val(),
+				edit: $("#edit_digitalinput_" + module).val(),
 			}
 		} )
 	.fail(function( data ) {
-		console.log( "add_digitaloutput Fail", data );
+		console.log( "add_digitalinput Fail", data );
 		var jsonresp = JSON.parse(data.responseText);
-		$("#savinghint_digitaloutput_" + module).attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_SAVING_FAILED">" + " Error: " + jsonresp.error + " (Statuscode: " + data.status + ").");
+		$("#savinghint_digitalinput_" + module).attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_SAVING_FAILED">" + " Error: " + jsonresp.error + " (Statuscode: " + data.status + ").");
 	})
 	.done(function( data ) {
-		console.log( "add_digitaloutput Done", data );
+		console.log( "add_digitalinput Done", data );
 		if (data.error) {
-			$("#savinghint_digitaloutput_" + module).attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_SAVING_FAILED">" + " Error: " + data.error + ").");
+			$("#savinghint_digitalinput_" + module).attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_SAVING_FAILED">" + " Error: " + data.error + ").");
 		} else {
-			$("#savinghint_digitaloutput_" + module).attr("style", "color:green").html("<TMPL_VAR "COMMON.HINT_SAVING_SUCCESS">" + ".");
+			$("#savinghint_digitalinput_" + module).attr("style", "color:green").html("<TMPL_VAR "COMMON.HINT_SAVING_SUCCESS">" + ".");
 			getconfig();
 			// Close Popup
-			$("#popup_digitaloutput_" + module).popup( "close" );
+			$("#popup_digitalinput_" + module).popup( "close" );
 			// Clean Popup
-			$( "#form_digitaloutput_" + module )[0].reset();
-			$("#savinghint_digitaloutput_" + module).html('&nbsp;');
+			$( "#form_digitalinput_" + module )[0].reset();
+			$("#savinghint_digitalinput_" + module).html('&nbsp;');
 		}
 	})
 	.always(function( data ) {
-		console.log( "add_digitaloutput Finished", data );
+		console.log( "add_digitalinput Finished", data );
 	});
 
 }
 
-// DELETE DIGITALOUTPUT: Popup
+// DELETE DIGITALINPUT: Popup
 
-function popup_delete_digitaloutput(outputname) {
+function popup_delete_digitalinput(inputname) {
 
-	$("#deletedigitaloutputhint").html('&nbsp;');
-	$("#deletedigitaloutputname").html(outputname);
-	$( "#popup_delete_digital_output" ).popup( "open" )
+	$("#deletedigitalinputhint").html('&nbsp;');
+	$("#deletedigitalinputname").html(inputname);
+	$( "#popup_delete_digital_input" ).popup( "open" )
 
 }
 
-// DELETE DIGITALOUTPUT (save to config)
+// DELETE DIGITALINPUT (save to config)
 
-function delete_digitaloutput() {
+function delete_digitalinput() {
 
-	$("#deletedigitaloutputhint").attr("style", "color:blue").html("<TMPL_VAR "COMMON.HINT_DELETING">");
+	$("#deletedigitalinputhint").attr("style", "color:blue").html("<TMPL_VAR "COMMON.HINT_DELETING">");
 	$.ajax( { 
 			url:  'ajax.cgi',
 			type: 'POST',
 			data: { 
-				action: 'deletedigitaloutput',
-				name: $("#deletedigitaloutputname").html(),
+				action: 'deletedigitalinput',
+				name: $("#deletedigitalinputname").html(),
 			}
 		} )
 	.fail(function( data ) {
-		console.log( "delete_digitaloutput Fail", data );
+		console.log( "delete_digitalinput Fail", data );
 		var jsonresp = JSON.parse(data.responseText);
-		$("#deletedigitaloutputhint").attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_DELETING_FAILED">" + " Error: " + jsonresp.error + " (Statuscode: " + data.status + ").");
+		$("#deletedigitalinputhint").attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_DELETING_FAILED">" + " Error: " + jsonresp.error + " (Statuscode: " + data.status + ").");
 	})
 	.done(function( data ) {
-		console.log( "delete_digitaloutput Done", data );
+		console.log( "delete_digitalinput Done", data );
 		if (data.error) {
-			$("#deletedigitaloutputhint").attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_DELETING_FAILED">" + " Error: " + data.error + ").");
+			$("#deletedigitalinputhint").attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_DELETING_FAILED">" + " Error: " + data.error + ").");
 		} else {
-			$("#deletedigitaloutputhint").attr("style", "color:green").html("<TMPL_VAR "COMMON.HINT_SAVING_SUCCESS">" + ".");
+			$("#deletedigitalinputhint").attr("style", "color:green").html("<TMPL_VAR "COMMON.HINT_SAVING_SUCCESS">" + ".");
 			getconfig();
 			// Close Popup
-			$("#popup_delete_digital_output").popup( "close" );
-			$("#deletedigitaloutputhint").html("&nbsp;");
+			$("#popup_delete_digital_input").popup( "close" );
+			$("#deletedigitalinputhint").html("&nbsp;");
 		}
 	})
 	.always(function( data ) {
-		console.log( "add_digitaloutput Finished", data );
+		console.log( "add_digitalinput Finished", data );
 	});
 
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // GET CONFIG
 
