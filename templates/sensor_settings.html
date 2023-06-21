@@ -3,8 +3,12 @@
 	display:none;
 }
 
-.small {
+.tiny {
 	font-size:70%;
+}
+
+.small {
+	font-size:80%;
 }
 
 .middle {
@@ -28,6 +32,7 @@
 	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 	grid-column-gap: 15px;
 	grid-row-gap: 15px;
+	text-shadow: none;
 }
 
 .box { 
@@ -45,6 +50,21 @@
 	vertical-align: middle;
 }
 
+.boxrow {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	align-items: center;
+	padding: 0;
+	margin: 0;
+}
+
+.boxitem {
+	padding: 5px;
+	text-align: center;
+	vertical-align: middle;
+}
+
 .servicestatus {
 	display: grid;
 	grid-template-columns: auto auto auto auto;
@@ -53,6 +73,7 @@
 	justify-content: center;
 	justify-items: center;
 	align-items: center;
+	text-shadow: none;
 }
 
 .margin {
@@ -69,25 +90,32 @@
 	text-align: center;
 }
 
+.ui-popup-container
+{
+	width:  50%;
+	height: 80%;
+}
+
 </style>
 
 <div class="servicestatus">
 	<div>
 		Service Status:
 	</div>
-	<div>
+	<div id="servicestatusicon">
 		<img src="./images/unknown_20.png">
 	</div>
-	<div class="status">
+	<div class="status" id="servicestatus">
 		<TMPL_VAR "GPIOS.LABEL_UNKNOWN">
 	</div>
 	<div>
-		<a href="#" class="ui-btn ui-icon-refresh ui-btn-icon-notext ui-corner-all">Refresh</a>
+		<a href="#" onclick="servicerestart();return false;" class="ui-btn ui-icon-refresh ui-btn-icon-notext ui-corner-all">Refresh</a>
 	</div>
 
 </div>
 
 <br>
+
 
 <div class="grid">
 	<div>
@@ -96,7 +124,7 @@
 			Sensors
 		</h2>
 		<div class="box">
-			Blah
+			Currently not implemented.
 		</div>
 	</div>
 </div>

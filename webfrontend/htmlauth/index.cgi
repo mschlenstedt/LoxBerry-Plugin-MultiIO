@@ -159,6 +159,9 @@ sub form_gpios
 
 sub form_sensors
 {
+	# Prepare template
+	&preparetemplate();
+
 	return();
 }
 
@@ -169,7 +172,11 @@ sub form_sensors
 
 sub form_logs
 {
-	$template->param("LOGLIST", LoxBerry::Web::loglist_html());
+	# Prepare template
+	&preparetemplate();
+
+	$templateout->param("LOGLIST", LoxBerry::Web::loglist_html());
+
 	return();
 }
 

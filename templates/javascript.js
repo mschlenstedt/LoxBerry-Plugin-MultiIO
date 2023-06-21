@@ -2,7 +2,7 @@
 
 $(function() {
 	
-//	interval = window.setInterval(function(){ servicestatus(); }, 5000);
+	interval = window.setInterval(function(){ servicestatus(); }, 3000);
 	servicestatus();
 	getconfig();
 
