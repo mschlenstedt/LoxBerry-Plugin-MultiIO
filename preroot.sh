@@ -66,7 +66,8 @@ else
 	exit 2;
 fi 
 
-echo "<INFO> Add user loxberry to GPIO group..."
-usermod -G gpio loxberry
+echo "<INFO> Add user 'loxberry' to different additional groups..."
+usermod -a -G gpio loxberry
+usermod -a -G i2c loxberry
 
 exit 0
