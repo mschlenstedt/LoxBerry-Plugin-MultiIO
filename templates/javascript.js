@@ -143,7 +143,7 @@ function add_gpiomodule(module) {
 				name: $("#name_" + module).val(),
 				module: $("#module_" + module).val(),
 				i2c_bus_num: $("#i2c_bus_num_" + module).val(),
-				chipaddr: $("#chipaddr_" + module).val(),
+				chip_addr: $("#chip_addr_" + module).val(),
 				edit: $("#edit_" + module).val(),
 			}
 		} )
@@ -266,7 +266,7 @@ function popup_edit_digitaloutput(digitaloutputname) {
 		}
 		$.each( outputs, function( intDevId, item){
 			if (item.name == digitaloutputname) {
-				let module;
+				var module;
 				$.each( modules, function( intDevIdimod, itemmod){
 					if (itemmod.name == item.module) {
 						module = itemmod.module;
@@ -487,7 +487,7 @@ function popup_edit_digitalinput(digitalinputname) {
 		}
 		$.each( inputs, function( intDevId, item){
 			if (item.name == digitalinputname) {
-				let module;
+				var module;
 				$.each( modules, function( intDevIdimod, itemmod){
 					if (itemmod.name == item.module) {
 						module = itemmod.module;
@@ -664,6 +664,327 @@ function delete_digitalinput() {
 
 }
 
+// ADD SENSOR MODULE: Popup
+
+function popup_add_sensormodule() {
+
+	var module = $('#sensor_module').val();
+	// Clean Popup
+	$("#savinghint_" + module).html('&nbsp;');
+	$("#edit_" + module).val('');
+	$( "#form_" + module )[0].reset();
+	// Open Popup
+	$( "#popup_sensor_module_" + module ).popup( "open" );
+
+}
+
+// EDIT SENSOR MODULE: Popup
+
+function popup_edit_sensormodule(modulename) {
+
+	// Ajax request
+	$.ajax({ 
+		url:  'ajax.cgi',
+		type: 'POST',
+		data: {
+			action: 'getconfig'
+		}
+	})
+	.fail(function( data ) {
+		console.log( "edit_sensormodule Fail", data );
+		return;
+	})
+	.done(function( data ) {
+		console.log( "edit_sensormodule Success", data );
+
+		modules = data.sensor_modules;
+		if ( data.error || jQuery.isEmptyObject(modules)) {
+			modules = undefined;
+			return;
+		}
+		$.each( modules, function( intDevId, item){
+			if (item.name == modulename) {
+				$("#name_" + item.module).val(item.name);
+                                $("#module_" + item.module).val(item.module);
+				$("#pin_" + item.module).val(item.pin).selectmenu('refresh',true);
+				$("#type_" + item.module).val(item.type).selectmenu('refresh',true);
+                                $("#edit_" + item.module).val(item.name);
+				$("#popup_sensor_module_" + item.module ).popup( "open" );
+			}
+		});
+	})
+	.always(function( data ) {
+		console.log( "edit_sensormodule Finished" );
+	})
+
+}
+
+// ADD/EDIT SENSOR MODULE (save to config)
+
+function add_sensormodule(module) {
+
+	$("#savinghint_" + module).attr("style", "color:blue").html("<TMPL_VAR "COMMON.HINT_SAVING">");
+	$.ajax( { 
+			url:  'ajax.cgi',
+			type: 'POST',
+			data: { 
+				action: 'sensormodule',
+				name: $("#name_" + module).val(),
+				module: $("#module_" + module).val(),
+				type: $("#type_" + module).val(),
+				pin: $("#pin_" + module).val(),
+				edit: $("#edit_" + module).val(),
+			}
+		} )
+	.fail(function( data ) {
+		console.log( "add_sensormodule Fail", data );
+		var jsonresp = JSON.parse(data.responseText);
+		$("#savinghint_" + module).attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_SAVING_FAILED">" + " Error: " + jsonresp.error + " (Statuscode: " + data.status + ").");
+	})
+	.done(function( data ) {
+		console.log( "add_sensormodule Done", data );
+		if (data.error) {
+			$("#savinghint_" + module).attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_SAVING_FAILED">" + " Error: " + data.error + ").");
+		} else {
+			$("#savinghint_" + module).attr("style", "color:green").html("<TMPL_VAR "COMMON.HINT_SAVING_SUCCESS">" + ".");
+			getconfig();
+			// Close Popup
+			$("#popup_sensor_module_" + module).popup( "close" );
+			$( "#form_" + module )[0].reset();
+			$("#savinghint_" + module).html('&nbsp;');
+		}
+	})
+	.always(function( data ) {
+		console.log( "add_sensormodule Finished", data );
+	});
+
+}
+
+// DELETE SENSOR MODULE: Popup
+
+function popup_delete_sensormodule(modulename) {
+
+	$("#deletesensormodulehint").html('&nbsp;');
+	$("#deletemodulename").html(modulename);
+	$("#popup_delete_sensor_module").popup( "open" )
+
+}
+
+// DELETE SENSOR MODULE (save to config)
+
+function delete_sensormodule() {
+
+	$("#deletesensormodulehint").attr("style", "color:blue").html("<TMPL_VAR "COMMON.HINT_DELETING">");
+	$.ajax( { 
+			url:  'ajax.cgi',
+			type: 'POST',
+			data: { 
+				action: 'deletesensormodule',
+				name: $("#deletemodulename").html(),
+			}
+		} )
+	.fail(function( data ) {
+		console.log( "delete_sensormodule Fail", data );
+		var jsonresp = JSON.parse(data.responseText);
+		$("#deletesensormodulehint").attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_DELETING_FAILED">" + " Error: " + jsonresp.error + " (Statuscode: " + data.status + ").");
+	})
+	.done(function( data ) {
+		console.log( "delete_sensormodule Done", data );
+		if (data.error) {
+			$("#deletesensormodulehint").attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_DELETING_FAILED">" + " Error: " + data.error + ").");
+		} else {
+			$("#deletesensormodulehint").attr("style", "color:green").html("<TMPL_VAR "COMMON.HINT_SAVING_SUCCESS">" + ".");
+			getconfig();
+			// Close Popup
+			$("#popup_delete_sensor_module").popup( "close" );
+			$("#deletesensormodulehint").html("&nbsp;");
+		}
+	})
+	.always(function( data ) {
+		console.log( "add_sensormodule Finished", data );
+	});
+
+}
+
+// ADD SENSOR INPUT: Popup
+
+function popup_add_sensorinput() {
+
+	var array = $('#sensorinput_module').val().split(',');
+	var modulename = array[0];
+	var module = array[1];
+
+	// Set defaults
+	$("#form_sensorinput_" + module)[0].reset();
+	$("#edit_sensorinput_" + module).val('');
+	$("#savinghint_sensorinput_" + module).html('&nbsp;');
+	$('#sensormodule_sensorinput_' + module).val(modulename);
+	// Open Popup
+	$( "#popup_sensorinput_" + module ).popup( "open" )
+
+}
+
+// EDIT SENSOR INPUT: Popup
+
+function popup_edit_sensorinput(sensorinputname) {
+
+	// Ajax request
+	$.ajax({ 
+		url:  'ajax.cgi',
+		type: 'POST',
+		data: {
+			action: 'getconfig'
+		}
+	})
+	.fail(function( data ) {
+		console.log( "edit_sensorinput Fail", data );
+		return;
+	})
+	.done(function( data ) {
+		console.log( "edit_sensorinput Success", data );
+
+		inputs = data.sensor_inputs;
+		if ( data.error || jQuery.isEmptyObject(inputs)) {
+			inputs = undefined;
+			return;
+		}
+		modules = data.sensor_modules;
+		if ( data.error || jQuery.isEmptyObject(modules)) {
+			modules = undefined;
+			return;
+		}
+		$.each( inputs, function( intDevId, item){
+			if (item.name == sensorinputname) {
+				var module;
+				$.each( modules, function( intDevIdimod, itemmod){
+					if (itemmod.name == item.module) {
+						module = itemmod.module;
+					}
+				});
+				if ( module === undefined ) {
+					return;
+				}
+				$("#name_sensorinput_" + module).val(item.name);
+				$("#sensormodule_sensorinput_" + module).val(item.module);
+				$("#type_sensorinput_" + module).val(item.type).selectmenu('refresh',true);
+				$("#interval_sensorinput_" + module).val(item.interval);
+				$("#edit_sensorinput_" + module).val(item.name);
+				// Open Popup
+				$("#savinghint_sensorinput_" + module).html('&nbsp;');
+				$("#popup_sensorinput_" + module ).popup( "open" );
+			}
+		});
+	})
+	.always(function( data ) {
+		console.log( "edit_sensorinput Finished" );
+	})
+
+}
+
+// ADD/EDIT DIGITAL OUTPUT (save to config)
+
+function add_sensorinput(module) {
+
+	//var checkboxvalues = [];
+	//jQuery("input[name='checkbox']").each(function() {
+	//checkboxvalues.push($(this).val());
+	//});
+	//test: countries.join(", "),
+
+	$("#savinghint_sensorinput_" + module).attr("style", "color:blue").html("<TMPL_VAR "COMMON.HINT_SAVING">");
+	$.ajax( { 
+			url:  'ajax.cgi',
+			type: 'POST',
+			data: { 
+				action: 'sensorinput',
+				name: $("#name_sensorinput_" + module).val(),
+				module: $("#sensormodule_sensorinput_" + module).val(),
+				type: $("#type_sensorinput_" + module).val(),
+				interval: $("#interval_sensorinput_" + module).val(),
+				edit: $("#edit_sensorinput_" + module).val(),
+			}
+		} )
+	.fail(function( data ) {
+		console.log( "add_sensorinput Fail", data );
+		var jsonresp = JSON.parse(data.responseText);
+		$("#savinghint_sensorinput_" + module).attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_SAVING_FAILED">" + " Error: " + jsonresp.error + " (Statuscode: " + data.status + ").");
+	})
+	.done(function( data ) {
+		console.log( "add_sensorinput Done", data );
+		if (data.error) {
+			$("#savinghint_sensorinput_" + module).attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_SAVING_FAILED">" + " Error: " + data.error + ").");
+		} else {
+			$("#savinghint_sensorinput_" + module).attr("style", "color:green").html("<TMPL_VAR "COMMON.HINT_SAVING_SUCCESS">" + ".");
+			getconfig();
+			// Close Popup
+			$("#popup_sensorinput_" + module).popup( "close" );
+			// Clean Popup
+			$( "#form_sensorinput_" + module )[0].reset();
+			$("#savinghint_sensorinput_" + module).html('&nbsp;');
+		}
+	})
+	.always(function( data ) {
+		console.log( "add_sensorinput Finished", data );
+	});
+
+}
+
+// DELETE SENSORINPUT: Popup
+
+function popup_delete_sensorinput(inputname) {
+
+	$("#deletesensorinputhint").html('&nbsp;');
+	$("#deletesensorinputname").html(inputname);
+	$( "#popup_delete_sensor_input" ).popup( "open" )
+
+}
+
+// DELETE SENSORINPUT (save to config)
+
+function delete_sensorinput() {
+
+	$("#deletesensorinputhint").attr("style", "color:blue").html("<TMPL_VAR "COMMON.HINT_DELETING">");
+	$.ajax( { 
+			url:  'ajax.cgi',
+			type: 'POST',
+			data: { 
+				action: 'deletesensorinput',
+				name: $("#deletesensorinputname").html(),
+			}
+		} )
+	.fail(function( data ) {
+		console.log( "delete_sensorinput Fail", data );
+		var jsonresp = JSON.parse(data.responseText);
+		$("#deletesensorinputhint").attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_DELETING_FAILED">" + " Error: " + jsonresp.error + " (Statuscode: " + data.status + ").");
+	})
+	.done(function( data ) {
+		console.log( "delete_sensorinput Done", data );
+		if (data.error) {
+			$("#deletesensorinputhint").attr("style", "color:red").html("<TMPL_VAR "COMMON.HINT_DELETING_FAILED">" + " Error: " + data.error + ").");
+		} else {
+			$("#deletesensorinputhint").attr("style", "color:green").html("<TMPL_VAR "COMMON.HINT_SAVING_SUCCESS">" + ".");
+			getconfig();
+			// Close Popup
+			$("#popup_delete_sensor_input").popup( "close" );
+			$("#deletesensorinputhint").html("&nbsp;");
+		}
+	})
+	.always(function( data ) {
+		console.log( "add_sensorinput Finished", data );
+	});
+
+}
+
+
+
+
+
+
+
+
+
+
+
 // GET CONFIG
 
 function getconfig() {
@@ -691,6 +1012,7 @@ function getconfig() {
 		if ( data.error || jQuery.isEmptyObject(modules)) {
 			$('#gpiomodules-list').html("<TMPL_VAR GPIOS.HINT_NO_MODULES>");
 			$('#digitaloutputs-list').html("<TMPL_VAR OUTPUTS.HINT_NO_OUTPUTS>");
+			$('#digitalinputs-list').html("<TMPL_VAR INPUTS.HINT_NO_INPUTS>");
 			modules = undefined;
 			return;
 		}
@@ -805,6 +1127,87 @@ function getconfig() {
                                 $(row).trigger("create");
 			});
 		};
+
+		// SENSOR Modules
+
+		console.log( "Parse Item for SENSOR_MODULES" );
+		modules = data.sensor_modules;
+		$('#sensormodules-list').empty();
+		if ( data.error || jQuery.isEmptyObject(modules)) {
+			$('#sensormodules-list').html("<TMPL_VAR SENSORS.HINT_NO_MODULES>");
+			$('#sensorinputs-list').html("<TMPL_VAR SENSORINPUTS.HINT_NO_MODULES>");
+			modules = undefined;
+			return;
+		}
+		// Create table
+		var table = $('<table style="min-width:200px; width:100%" width="100%" data-role="table" id="sensormodulestable" data-mode="reflow" class="ui-responsive table-stripe ui-body-b">').appendTo('#sensormodules-list');
+		// Add the header row
+		var theader = $('<thead />').appendTo(table);
+		var theaderrow = $('<tr class="ui-bar-b"/>').appendTo(theader);
+		$('<th style="text-align:left; width:40%; padding:5px;"><TMPL_VAR COMMON.LABEL_NAME><\/th>').appendTo(theaderrow);
+		$('<th style="text-align:left; width:40%; padding:5px;"><TMPL_VAR GPIOS.LABEL_MODULE><\/th>').appendTo(theaderrow);
+		$('<th style="text-align:left; width:20%; padding:5px;"><TMPL_VAR COMMON.LABEL_ACTIONS><\/th>').appendTo(theaderrow);
+		// Create table body.
+		var tbody = $('<tbody />').appendTo(table);
+		// Add the data rows to the table body and dropdown lists
+		$('#sensorinput_module').empty();
+		$.each( modules, function( intDevId, item){
+			// Dropdown list for Sensor inputs/outputs
+			$('<option value=\'' + item.name + ',' + item.module + '\'>' + item.name + '</option/>').appendTo('#sensorinput_module');
+			// Table
+			var row = $('<tr />').appendTo(tbody);
+			$('<td style="text-align:left;">'+item.name+'<\/td>').appendTo(row);
+			$('<td style="text-align:left;">'+item.module+'<\/td>').appendTo(row);
+			$('<td />', { html: '\
+			<a href="javascript:popup_edit_sensormodule(\'' + item.name + '\')" id="btneditsensormodule_'+item.name+'" name="btneditsensormodule_'+item.name+'" \
+                        title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
+                        <img src="./images/settings_20.png" height="20"></img></a> \
+                        <a href="javascript:popup_delete_sensormodule(\'' + item.name + '\')" id="btnaskdeletesensormodule_'+item.name+'" name="btnaskdeletesensormodule_'+item.name+'" \
+                        title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
+                        <img src="./images/cancel_20.png" height="20"></img></a> \
+                        ' }).appendTo(row);
+                        $(row).trigger("create");
+		});
+		$("#sensorinput_module").trigger("change");
+
+		// Inputs
+
+		console.log( "Parse Item for SENSORINPUTS" );
+		inputs = data.sensor_inputs;
+		$('#sensorinputs-list').empty();
+		if ( data.error || jQuery.isEmptyObject(inputs)) {
+			console.log("Ja");
+			$('#sensorinputs-list').html("<TMPL_VAR SENSORINPUTS.HINT_NO_INPUTS>");
+			inputs = undefined;
+		} else {
+			// Create table
+			var table = $('<table style="min-width:200px; width:100%" width="100%" data-role="table" id="sensorinputstable" data-mode="reflow" class="ui-responsive table-stripe ui-body-b">').appendTo('#sensorinputs-list');
+			// Add the header row
+			var theader = $('<thead />').appendTo(table);
+			var theaderrow = $('<tr class="ui-bar-b"/>').appendTo(theader);
+			$('<th style="text-align:left; width:40%; padding:5px;"><TMPL_VAR COMMON.LABEL_NAME><\/th>').appendTo(theaderrow);
+			$('<th style="text-align:left; width:30%; padding:5px;"><TMPL_VAR GPIOS.LABEL_MODULE><\/th>').appendTo(theaderrow);
+			$('<th style="text-align:left; width:20%; padding:5px;"><TMPL_VAR COMMON.LABEL_ACTIONS><\/th>').appendTo(theaderrow);
+			// Create table body.
+			var tbody = $('<tbody />').appendTo(table);
+			// Add the data rows to the table body.
+			$.each( inputs, function( intDevId, item){
+				var row = $('<tr />').appendTo(tbody);
+				$('<td style="text-align:left;">'+item.name+'<\/td>').appendTo(row);
+				$('<td style="text-align:left;">'+item.module+'<\/td>').appendTo(row);
+				$('<td />', { html: '\
+				<a href="javascript:popup_edit_sensorinput(\'' + item.name + '\')" id="btneditsensorinput_'+item.name+'" name="btneditsensorinput_'+item.name+'" \
+                                title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
+                                <img src="./images/settings_20.png" height="20"></img></a> \
+                                \
+                                <a href="javascript:popup_delete_sensorinput(\'' + item.name + '\')" id="btnaskdeletesensorinput_'+item.name+'" name="btnaskdeletesensorinput_'+item.name+'" \
+                                title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
+                                <img src="./images/cancel_20.png" height="20"></img></a> \
+                                ' }).appendTo(row);
+                                $(row).trigger("create");
+			});
+		};
+
 	})
 	.always(function( data ) {
 		console.log( "getconfig Finished" );

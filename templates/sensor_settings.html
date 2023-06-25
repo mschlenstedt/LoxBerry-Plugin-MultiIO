@@ -116,15 +116,111 @@
 
 <br>
 
-
 <div class="grid">
 	<div>
 		<h2 class="boxtitle ui-title">
-			<span style="vertical-align:middle"><img src="./images/sensor_title_32.png"></span>
-			Sensors
+			<span style="vertical-align:middle"><img src="./images/chip_title_32.png"></span>
+			<TMPL_VAR "SENSORS.LABEL_SENSORMODULES">
 		</h2>
 		<div class="box">
-			Currently not implemented.
+			<div class="boxrow">
+					<div class="boxitem small">
+						<TMPL_VAR "SENSORS.LABEL_ADD_SENSORMODULE">
+					</div>
+					<div class="boxitem" style="width:200px">
+							<select name="sensor_module" id="sensor_module" data-mini="true">
+								<TMPL_VAR "SENSOR_MODULE_OPTIONS">
+							</select>
+					</div>
+					<div class="boxitem">
+							<a href="#" onclick="popup_add_sensormodule(); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-plus ui-corner-all"><TMPL_VAR "COMMON.BUTTON_ADD"></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem" style="width:500px">
+						<!-- Table -->
+						<div id="sensormodules-list"></div>
+					</div>
+			</div>
 		</div>
 	</div>
+
+	<div>
+		<h2 class="boxtitle ui-title">
+			<span style="vertical-align:middle"><img src="./images/input_title_32.png"></span>
+			<TMPL_VAR "SENSORS.LABEL_INPUTS">
+		</h2>
+		<div class="box">
+			<div class="boxrow">
+					<div class="boxitem small">
+						<TMPL_VAR "SENSORINPUTS.LABEL_ADD_SENSORINPUT">
+					</div>
+					<div class="boxitem" style="width:200px">
+							<select name="sensorinput_module" id="sensorinput_module" data-mini="true">
+							</select>
+					</div>
+					<div class="boxitem">
+							<a href="#" onclick="popup_add_sensorinput(); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-plus ui-corner-all"><TMPL_VAR "COMMON.BUTTON_ADD"></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem" style="width:500px">
+						<!-- Table -->
+						<div id="sensorinputs-list"></div>
+					</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div data-role="popup" id="popup_delete_sensor_module" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
+		<h3 class="boxtitle ui-title">
+			<TMPL_VAR SENSORS.LABEL_DELETE_SENSORMODULE>?
+		</h3>
+
+		<div class="box">
+			<div class="boxrow">
+					<div class="boxitem">
+						<TMPL_VAR SENSORS.HINT_DELETE_SENSORMODULE_1> <b><span id="deletemodulename">&nbsp;</span></b> <TMPL_VAR SENSORS.HINT_DELETE_SENSORMODULE_2>	
+					</div>
+			</div>
+			<br>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
+						<a href="#" onclick="delete_sensormodule(); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_DELETE"></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<span id="deletesensormodulehint">&nbsp;</span>
+					</div>
+			</div>
+		</div>
+</div>
+
+<div data-role="popup" id="popup_delete_sensor_input" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
+		<h3 class="boxtitle ui-title">
+			<TMPL_VAR SENSORINPUTS.LABEL_DELETE_SENSORINPUT>?
+		</h3>
+
+		<div class="box">
+			<div class="boxrow">
+					<div class="boxitem">
+						<TMPL_VAR SENSORINPUTS.HINT_DELETE_SENSORINPUT_1> <b><span id="deletesensorinputname">&nbsp;</span></b> <TMPL_VAR SENSORINPUTS.HINT_DELETE_SENSORINPUT_2>	
+					</div>
+			</div>
+			<br>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
+						<a href="#" onclick="delete_sensorinput(); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_DELETE"></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<span id="deletesensorinputhint">&nbsp;</span>
+					</div>
+			</div>
+		</div>
 </div>

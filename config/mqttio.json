@@ -2,6 +2,8 @@
    "digital_inputs" : [],
    "digital_outputs" : [],
    "gpio_modules" : [],
+   "sensor_modules" : [],
+   "sensor_inputs" : [],
    "logging" : {
       "formatters" : {
          "loxberry" : {

@@ -70,8 +70,8 @@ elsif ( $action eq "check" ) {
 
 else {
 
-	LOGERR "No valid action specified. action=start|stop|restart|check is required. Exiting.";
-	print "No valid action specified. action=start|stop|restart|check is required. Exiting.\n";
+	LOGERR "No valid action specified. --action=start|stop|restart|check is required. Exiting.";
+	print "No valid action specified. --action=start|stop|restart|check is required. Exiting.\n";
 	exit(1);
 
 }
@@ -89,17 +89,13 @@ exit (0);
 sub start
 {
 
-	$log->default;
-	my $count = `pgrep -c -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
-	chomp ($count);
-	$count--; # Perl itself runs pgrep with sh, which also match -f in pgrep
-	if ($count > "0") {
-		LOGCRIT "MQTT IO already running. Please stop it before starting again. Exiting.";
-		exit (1);
+	if (-e  "$lbpconfigdir/bridge_stopped.cfg") {
+		unlink("$lbpconfigdir/bridge_stopped.cfg");
 	}
 
+	$log->default;
 	# Change config on the fly and convert to yaml for mqtt-io
-	system ("rm /dev/shm/mqttio.yaml > /dev/null 2>&1");
+	unlink("/dev/shm/mqttio.yaml");
 	system ("cp $lbpconfigdir/mqttio.json /dev/shm > /dev/null 2>&1");
 	system ("chmod 600 /dev/shm/mqttio.json > /dev/null 2>&1");
 	my $cfgfile ="/dev/shm/mqttio.json";
@@ -113,7 +109,7 @@ sub start
 	# MQTT
 	my $mqtt = LoxBerry::IO::mqtt_connectiondetails();
 	$cfg->{'mqtt'}->{'host'} = $mqtt->{'brokerhost'};
-	my $brokerport = $mqtt->{'brokerport'} + 0.1 - 0.1; # Convert to int
+	my $brokerport = $mqtt->{'brokerport'} + 1 - 1; # Convert to int
 	$cfg->{'mqtt'}->{'port'} = $brokerport;
 	$cfg->{'mqtt'}->{'user'} = $mqtt->{'brokeruser'} if ($mqtt->{'brokeruser'});
 	$cfg->{'mqtt'}->{'password'} = $mqtt->{'brokerpass'} if ($mqtt->{'brokerpass'});
@@ -139,16 +135,17 @@ sub start
 	$loglevel = "DEBUG" if ($log->loglevel() eq 6 || $log->loglevel() eq 7);
 	$cfg->{'logging'}->{'handlers'}->{'console'}->{'level'} = $loglevel;
 	$cfg->{'logging'}->{'handlers'}->{'file'}->{'level'} = $loglevel;
+	$cfg->{'logging'}->{'loggers'}->{'mqtt_io'}->{'level'} = $loglevel;
 
 	# Write temporary json config
 	$jsonobjcfg->write();
 
 	# Convert to YAML
 	system ("cat /dev/shm/mqttio.json | $lbpbindir/helpers/json2yaml.py > /dev/shm/mqttio.yaml");
+	system ("chmod 600 /dev/shm/mqttio.yaml > /dev/null 2>&1");
 	system ("sed -i -e \"s#\\(.*:.*\\)'\\([[:alnum:]_-]*\\)'#\\1\\2#g\" /dev/shm/mqttio.yaml");
 	system ("sed -i -e \"s#\\(.*:.*\\)ON#\\1'ON'#g\" /dev/shm/mqttio.yaml"); # ON/OFF are always strings
 	system ("sed -i -e \"s#\\(.*:.*\\)OFF#\\1'OFF'#g\" /dev/shm/mqttio.yaml"); # ON/OFF are always strings
-	system ("chmod 600 /dev/shm/mqttio.yaml > /dev/null 2>&1");
 	unlink ("/dev/shm/mqttio.json");
 
 	if (!-e "/dev/shm/mqttio.yaml") {
@@ -160,21 +157,13 @@ sub start
 
 	$mqttiolog->default;
 	LOGSTART "Starting MQTT IO...";
+	system ("pkill -f 'python3 -m mqtt_io'");
+	sleep 2;
 	system ("python3 -m mqtt_io /dev/shm/mqttio.yaml >> $logfile 2>&1 &");
 	sleep 2;
-
-	my $count = `pgrep -c -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
-	chomp ($count);
-	$count--; # Perl itself runs pgrep with sh, which also match -f in pgrep
 	$log->default;
-	if ($count eq "0") {
-		LOGCRIT "Could not start MQTT IO. Error: $?";
-		exit (1)
-	} else {
-		my $status = `pgrep -o -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
-		chomp ($status);
-		LOGOK "MQTT IO started successfully. Running PID: $status";
-	}
+
+	LOGOK "Done.";
 
 	return (0);
 
@@ -185,25 +174,16 @@ sub stop
 
 	$log->default;
 	LOGINF "Stopping MQTT IO...";
-	system ('pkill -f "python3 -m mqtt_io /dev/shm/mqttio.yaml" > /dev/null 2>&1');
-	sleep 2;
-
-	my $count = `pgrep -c -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
-	chomp ($count);
-	$count--; # Perl `` itself runs pgrep with sh, which also match -f in pgrep
-	if ($count eq "0") {
-		LOGOK "MQTT IO stopped successfully.";
-	} else {
-		my $status = `pgrep -o -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
-		chomp ($status);
-		LOGCRIT "Could not stop MQTT IO. Running PID: $status";
-		exit (1)
-	}
+	system ("pkill -f 'python3 -m mqtt_io'");
 
 	# Remove temporary config file
 	if (-e "/dev/shm/mqttio.yaml") {
 		unlink ("/dev/shm/mqttio.yaml");
 	}
+
+	my $response = LoxBerry::System::write_file("$lbpconfigdir/bridge_stopped.cfg", "1");
+
+	LOGOK "Done.";
 
 	return(0);
 
@@ -228,32 +208,44 @@ sub check
 	$log->default;
 	LOGINF "Checking Status of MQTT IO...";
 	
+	if (-e  "$lbpconfigdir/bridge_stopped.cfg") {
+		LOGOK "MQTT IO was stopped manually. Nothing to do.";
+		return(0);
+	}
+
 	# Creating tmp file with failed checks
 	if (!-e "/dev/shm/multiio-watchdog-fails.dat") {
 		my $response = LoxBerry::System::write_file("/dev/shm/multiio-watchdog-fails.dat", "0");
 	}
 
-	my $count = `pgrep -c -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
-	chomp ($count);
-	$count--; # Perl `` itself runs pgrep with sh, which also match -f in pgrep
-	if ($count eq "0") {
-		LOGERR "MQTT IO seems not to be running.";
+	my ($exitcode, $output)  = execute ("pgrep -f 'python3 -m mqtt_io'");
+
+	if ($exitcode != 0) {
+		LOGWARN "MQTT IO seems to be dead - Error $exitcode";
 		my $fails = LoxBerry::System::read_file("/dev/shm/multiio-watchdog-fails.dat");
 		chomp ($fails);
 		$fails++;
 		my $response = LoxBerry::System::write_file("/dev/shm/multiio-watchdog-fails.dat", "$fails");
 		if ($fails > 9) {
-			LOGERR "Too many failures. Will stop watchdogging... Check your configuration and start service manually.";
+			LOGERR "Too many failures. Will stop watchdogging... Check your configuration and start MQTT IO manually.";
 		} else {
 			&restart();
 		}
 	} else {
-		my $status = `pgrep -o -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;
-		chomp ($status);
-		LOGOK "MQTT IO is running. Fine. Running PID: $status";
+		LOGOK "MQTT IO seems to be alive. Nothing to do.";
 		my $response = LoxBerry::System::write_file("/dev/shm/multiio-watchdog-fails.dat", "0");
 	}
 
 	return(0);
+
+}
+
+##
+## Always execute when Script ends
+##
+END {
+
+	LOGEND "This is the end - My only friend, the end...";
+	LoxBerry::System::unlock(lockfile => 'multiio-watchdog');
 
 }
