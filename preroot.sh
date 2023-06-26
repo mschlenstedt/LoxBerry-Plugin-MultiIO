@@ -66,6 +66,9 @@ else
 	exit 2;
 fi 
 
+echo "<INFO> Start installing Python Modules..."
+yes | python3 -m pip install --upgrade RPi.GPIO pcf8575 pcf8574 adafruit_circuitpython_mcp230xx Adafruit_DHT adafruit-circuitpython-ads1x15 adafruit-circuitpython-ahtx0 smbus2 RPi.bme280 bme680 w1thermsensor pi-ina219 adafruit-mcp3008
+
 echo "<INFO> Add user 'loxberry' to different additional groups..."
 usermod -a -G gpio loxberry
 usermod -a -G i2c loxberry
