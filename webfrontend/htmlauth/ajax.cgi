@@ -28,6 +28,11 @@ if( $q->{action} eq "servicerestart" ) {
 	$response = $?;
 }
 
+if( $q->{action} eq "servicestop" ) {
+	system ("$lbpbindir/watchdog.pl --action=stop --verbose=1 > /dev/null 2>&1");
+	$response = $?;
+}
+
 if( $q->{action} eq "servicestatus" ) {
 	my $status;
 	my $count = `pgrep -c -f "python3 -m mqtt_io /dev/shm/mqttio.yaml"`;

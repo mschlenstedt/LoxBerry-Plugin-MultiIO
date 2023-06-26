@@ -1,5 +1,7 @@
 <script>
 
+var nopidrefresh = "0";
+
 $(function() {
 	
 	interval = window.setInterval(function(){ servicestatus(); }, 3000);
@@ -10,11 +12,10 @@ $(function() {
 
 // SERVICE STATE
 
-function servicestatus(update) {
+function servicestatus() {
 
-	if (update) {
-		$("#servicestatus").attr("style", "background:#dfdfdf").html("<TMPL_VAR "COMMON.HINT_UPDATING">");
-		$("#servicestatusicon").html("<img src='./images/unknown_20.png'>");
+	if (nopidrefresh === "1") {
+		return;
 	}
 
 	$.ajax( { 
@@ -48,7 +49,7 @@ function servicestatus(update) {
 
 function servicerestart() {
 
-	clearInterval(interval);
+	nopidrefresh = "1";
 	$("#servicestatus").attr("style", "color:blue").html("<TMPL_VAR "COMMON.HINT_EXECUTING">");
 	$("#servicestatusicon").html("<img src='./images/unknown_20.png'>");
 	$.ajax( { 
@@ -64,14 +65,43 @@ function servicerestart() {
 	.done(function( data ) {
 		console.log( "Servicerestart Success", data );
 		if (data == "0") {
-			servicestatus(1);
+			servicestatus();
 		} else {
 			$("#servicestatus").attr("style", "background:#dfdfdf; color:red").html("<TMPL_VAR "COMMON.HINT_FAILED">");
 		}
-		interval = window.setInterval(function(){ servicestatus(); }, 5000);
 	})
 	.always(function( data ) {
 		console.log( "Servicerestart Finished", data );
+		nopidrefresh = "0";
+	});
+}
+
+function servicestop() {
+
+	nopidrefresh = "1";
+	$("#servicestatus").attr("style", "color:blue").html("<TMPL_VAR "COMMON.HINT_EXECUTING">");
+	$("#servicestatusicon").html("<img src='./images/unknown_20.png'>");
+	$.ajax( { 
+			url:  'ajax.cgi',
+			type: 'POST',
+			data: { 
+				action: 'servicestop'
+			}
+		} )
+	.fail(function( data ) {
+		console.log( "Servicestop Fail", data );
+	})
+	.done(function( data ) {
+		console.log( "Servicestop Success", data );
+		if (data == "0") {
+			servicestatus();
+		} else {
+			$("#servicestatus").attr("style", "background:#dfdfdf; color:red").html("<TMPL_VAR "COMMON.HINT_FAILED">");
+		}
+	})
+	.always(function( data ) {
+		console.log( "Servicerestart Finished", data );
+		nopidrefresh = "0";
 	});
 }
 
@@ -1039,13 +1069,13 @@ function getconfig() {
 			$('<td style="text-align:left;">'+item.module+'<\/td>').appendTo(row);
 			$('<td />', { html: '\
 			<a href="javascript:popup_edit_gpiomodule(\'' + item.name + '\')" id="btneditgpiomodule_'+item.name+'" name="btneditgpiomodule_'+item.name+'" \
-                        title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
-                        <img src="./images/settings_20.png" height="20"></img></a> \
-                        <a href="javascript:popup_delete_gpiomodule(\'' + item.name + '\')" id="btnaskdeletegpiomodule_'+item.name+'" name="btnaskdeletegpiomodule_'+item.name+'" \
-                        title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
-                        <img src="./images/cancel_20.png" height="20"></img></a> \
-                        ' }).appendTo(row);
-                        $(row).trigger("create");
+			title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
+			<img src="./images/settings_20.png" height="20"></img></a> \
+			<a href="javascript:popup_delete_gpiomodule(\'' + item.name + '\')" id="btnaskdeletegpiomodule_'+item.name+'" name="btnaskdeletegpiomodule_'+item.name+'" \
+			title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
+			<img src="./images/cancel_20.png" height="20"></img></a> \
+			' }).appendTo(row);
+			$(row).trigger("create");
 		});
 		$("#digitaloutput_module").trigger("change");
 		$("#digitalinput_module").trigger("change");
@@ -1078,14 +1108,14 @@ function getconfig() {
 				$('<td style="text-align:left;">'+item.pin+'<\/td>').appendTo(row);
 				$('<td />', { html: '\
 				<a href="javascript:popup_edit_digitaloutput(\'' + item.name + '\')" id="btneditdigitaloutput_'+item.name+'" name="btneditdigitaloutput_'+item.name+'" \
-                                title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
-                                <img src="./images/settings_20.png" height="20"></img></a> \
-                                \
-                                <a href="javascript:popup_delete_digitaloutput(\'' + item.name + '\')" id="btnaskdeletedigitaloutput_'+item.name+'" name="btnaskdeletedigitaloutput_'+item.name+'" \
-                                title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
-                                <img src="./images/cancel_20.png" height="20"></img></a> \
-                                ' }).appendTo(row);
-                                $(row).trigger("create");
+				title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
+				<img src="./images/settings_20.png" height="20"></img></a> \
+				\
+				<a href="javascript:popup_delete_digitaloutput(\'' + item.name + '\')" id="btnaskdeletedigitaloutput_'+item.name+'" name="btnaskdeletedigitaloutput_'+item.name+'" \
+				title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
+				<img src="./images/cancel_20.png" height="20"></img></a> \
+				' }).appendTo(row);
+				$(row).trigger("create");
 			});
 		};
 
@@ -1117,14 +1147,14 @@ function getconfig() {
 				$('<td style="text-align:left;">'+item.pin+'<\/td>').appendTo(row);
 				$('<td />', { html: '\
 				<a href="javascript:popup_edit_digitalinput(\'' + item.name + '\')" id="btneditdigitalinput_'+item.name+'" name="btneditdigitalinput_'+item.name+'" \
-                                title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
-                                <img src="./images/settings_20.png" height="20"></img></a> \
-                                \
-                                <a href="javascript:popup_delete_digitalinput(\'' + item.name + '\')" id="btnaskdeletedigitalinput_'+item.name+'" name="btnaskdeletedigitalinput_'+item.name+'" \
-                                title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
-                                <img src="./images/cancel_20.png" height="20"></img></a> \
-                                ' }).appendTo(row);
-                                $(row).trigger("create");
+				title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
+				<img src="./images/settings_20.png" height="20"></img></a> \
+				\
+				<a href="javascript:popup_delete_digitalinput(\'' + item.name + '\')" id="btnaskdeletedigitalinput_'+item.name+'" name="btnaskdeletedigitalinput_'+item.name+'" \
+				title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
+				<img src="./images/cancel_20.png" height="20"></img></a> \
+				' }).appendTo(row);
+				$(row).trigger("create");
 			});
 		};
 
@@ -1160,13 +1190,13 @@ function getconfig() {
 			$('<td style="text-align:left;">'+item.module+'<\/td>').appendTo(row);
 			$('<td />', { html: '\
 			<a href="javascript:popup_edit_sensormodule(\'' + item.name + '\')" id="btneditsensormodule_'+item.name+'" name="btneditsensormodule_'+item.name+'" \
-                        title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
-                        <img src="./images/settings_20.png" height="20"></img></a> \
-                        <a href="javascript:popup_delete_sensormodule(\'' + item.name + '\')" id="btnaskdeletesensormodule_'+item.name+'" name="btnaskdeletesensormodule_'+item.name+'" \
-                        title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
-                        <img src="./images/cancel_20.png" height="20"></img></a> \
-                        ' }).appendTo(row);
-                        $(row).trigger("create");
+			title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
+			<img src="./images/settings_20.png" height="20"></img></a> \
+			<a href="javascript:popup_delete_sensormodule(\'' + item.name + '\')" id="btnaskdeletesensormodule_'+item.name+'" name="btnaskdeletesensormodule_'+item.name+'" \
+			title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
+			<img src="./images/cancel_20.png" height="20"></img></a> \
+			' }).appendTo(row);
+			$(row).trigger("create");
 		});
 		$("#sensorinput_module").trigger("change");
 
@@ -1197,14 +1227,14 @@ function getconfig() {
 				$('<td style="text-align:left;">'+item.module+'<\/td>').appendTo(row);
 				$('<td />', { html: '\
 				<a href="javascript:popup_edit_sensorinput(\'' + item.name + '\')" id="btneditsensorinput_'+item.name+'" name="btneditsensorinput_'+item.name+'" \
-                                title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
-                                <img src="./images/settings_20.png" height="20"></img></a> \
-                                \
-                                <a href="javascript:popup_delete_sensorinput(\'' + item.name + '\')" id="btnaskdeletesensorinput_'+item.name+'" name="btnaskdeletesensorinput_'+item.name+'" \
-                                title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
-                                <img src="./images/cancel_20.png" height="20"></img></a> \
-                                ' }).appendTo(row);
-                                $(row).trigger("create");
+				title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
+				<img src="./images/settings_20.png" height="20"></img></a> \
+				\
+				<a href="javascript:popup_delete_sensorinput(\'' + item.name + '\')" id="btnaskdeletesensorinput_'+item.name+'" name="btnaskdeletesensorinput_'+item.name+'" \
+				title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
+				<img src="./images/cancel_20.png" height="20"></img></a> \
+				' }).appendTo(row);
+				$(row).trigger("create");
 			});
 		};
 

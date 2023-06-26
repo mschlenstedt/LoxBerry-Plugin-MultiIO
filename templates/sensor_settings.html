@@ -109,7 +109,10 @@
 		<TMPL_VAR "GPIOS.LABEL_UNKNOWN">
 	</div>
 	<div>
-		<a href="#" onclick="servicerestart();return false;" class="ui-btn ui-icon-refresh ui-btn-icon-notext ui-corner-all">Refresh</a>
+		<a href="#" onclick="servicerestart();return false;" data-role="button" data-inline="true" data-icon="refresh" data-mini="true"
+					data-transition="flow"><TMPL_VAR COMMON.BUTTON_RESTART></a>
+		<a href="#" onclick="servicestop();return false;" data-role="button" data-inline="true" data-icon="delete" data-mini="true"
+					data-transition="flow"><TMPL_VAR COMMON.BUTTON_STOP></a>
 	</div>
 
 </div>
