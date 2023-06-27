@@ -20,15 +20,10 @@
 # Modules
 ##########################################################################
 
-# use Config::Simple '-strict';
-# use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use LoxBerry::System;
-#use LoxBerry::Web;
 use LoxBerry::JSON; # Available with LoxBerry 2.0
-#require "$lbpbindir/libs/LoxBerry/JSON.pm";
 use LoxBerry::Log;
-#use Time::HiRes qw ( sleep );
 use warnings;
 use strict;
 #use Data::Dumper;
@@ -71,9 +66,9 @@ if( $q->{ajax} ) {
 ##########################################################################
 
 } else {
-	
+
 	require LoxBerry::Web;
-	
+
 	# Default is gpio_settings form
 	$q->{form} = "gpios" if !$q->{form};
 
@@ -91,8 +86,8 @@ if( $q->{ajax} ) {
 		my $templatefile = "$lbptemplatedir/gpio_settings.html";
 		$template = LoxBerry::System::read_file($templatefile);
 		&form_gpios();
-       	}
-	
+	}
+
 }
 
 # Print the form out
@@ -119,7 +114,7 @@ sub form_gpios
 			$options .= "<option value='$_'>$_</option>";
 		}
 	}
-	
+
 	# Read DIGITALOUTPUT templates
 	opendir(my $fh,"$lbptemplatedir/digitaloutputs");
 	my @files = readdir($fh);
@@ -131,7 +126,7 @@ sub form_gpios
 			$_ =~ s/\.html//g;
 		}
 	}
-	
+
 	# Read DIGITALINPUT templates
 	opendir(my $fh,"$lbptemplatedir/digitalinputs");
 	my @files = readdir($fh);
@@ -159,8 +154,37 @@ sub form_gpios
 
 sub form_sensors
 {
+	# Read Sensor Modules templates
+	opendir(my $fh,"$lbptemplatedir/sensormodules");
+	my @files = readdir($fh);
+	close $fh;
+
+	my $options;
+	foreach (@files) {
+		if ( $_ =~ /.*\.html/ ) {
+			$template = $template .= LoxBerry::System::read_file("$lbptemplatedir/sensormodules/$_");
+			$_ =~ s/\.html//g;
+			$options .= "<option value='$_'>$_</option>";
+		}
+	}
+
+	# Read SENSORINPUT templates
+	opendir(my $fh,"$lbptemplatedir/sensorinputs");
+	my @files = readdir($fh);
+	close $fh;
+
+	foreach (@files) {
+		if ( $_ =~ /.*\.html/ ) {
+			$template = $template .= LoxBerry::System::read_file("$lbptemplatedir/sensorinputs/$_");
+			$_ =~ s/\.html//g;
+		}
+	}
+
 	# Prepare template
 	&preparetemplate();
+
+	# Template Variables
+	$templateout->param("SENSOR_MODULE_OPTIONS", $options);
 
 	return();
 }
@@ -200,18 +224,18 @@ sub preparetemplate
 
 	# Language File
 	%L = LoxBerry::System::readlanguage($templateout, "language.ini");
-	
+
 	# Navbar
 	our %navbar;
 
 	$navbar{10}{Name} = "$L{'COMMON.LABEL_GPIOS'}";
 	$navbar{10}{URL} = 'index.cgi?form=gpios';
 	$navbar{10}{active} = 1 if $q->{form} eq "gpios";
-	
+
 	$navbar{20}{Name} = "$L{'COMMON.LABEL_SENSORS'}";
 	$navbar{20}{URL} = 'index.cgi?form=sensors';
 	$navbar{20}{active} = 1 if $q->{form} eq "sensors";
-	
+
 	$navbar{98}{Name} = "$L{'COMMON.LABEL_LOGS'}";
 	$navbar{98}{URL} = 'index.cgi?form=logs';
 	$navbar{98}{active} = 1 if $q->{form} eq "logs";
@@ -241,5 +265,5 @@ sub ajax_header
 			-type => 'application/json',
 			-charset => 'utf-8',
 			-status => '200 OK',
-	);	
-}	
+	);
+}

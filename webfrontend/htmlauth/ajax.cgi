@@ -92,6 +92,10 @@ if( $q->{action} eq "gpiomodule" ) {
 		foreach $elemKey (@searchresult) {
 			$cfg->{'digital_outputs'}->[$elemKey]->{'module'} = $q->{'name'};
 		}
+		my @searchresult = $jsonobj->find( $cfg->{'digital_inputs'}, "\$_->{'module'} eq \"" . $q->{'edit'} . "\"" );
+		foreach $elemKey (@searchresult) {
+			$cfg->{'digital_inputs'}->[$elemKey]->{'module'} = $q->{'name'};
+		}
 	}
 	
 	# Add new/eddited module
@@ -102,8 +106,8 @@ if( $q->{action} eq "gpiomodule" ) {
 			module => $q->{'module'},
 		);
 		# Optional
-		$module{'i2c_bus_num'} = $q->{'i2c_bus_num'} if ($q->{'i2c_bus_num'});
-		$module{'chipaddr'} = $q->{'chipaddr'} if ($q->{'chipaddr'});
+		$module{'i2c_bus_num'} = $q->{'i2c_bus_num'} if ($q->{'i2c_bus_num'} ne "");
+		$module{'chip_addr'} = $q->{'chip_addr'} if ($q->{'chip_addr'} ne "");
 		# Save
 		push @{$cfg->{'gpio_modules'}}, \%module;
 		$jsonobj->write();
@@ -185,11 +189,11 @@ if( $q->{action} eq "digitaloutput" ) {
 			publish_initial => 'true',
 		);
 		# Optional
-		$digitaloutput{'timed_ms'} = $q->{'timed_ms'} if ($q->{'timed_ms'} > 0);
-		$digitaloutput{'initial'} = $q->{'initial'} if ($q->{'initial'});
+		$digitaloutput{'timed_ms'} = int($q->{'timed_ms'}) if ($q->{'timed_ms'} ne "");
+		$digitaloutput{'initial'} = $q->{'initial'} if ($q->{'initial'} ne "");
 		$digitaloutput{'on_payload'} = $q->{'payload_on'} ne "ON" ? $q->{'payload_on'} : "ON";
 		$digitaloutput{'off_payload'} = $q->{'payload_off'} ne "OFF" ? $q->{'payload_off'} : "OFF";
-		$digitaloutput{'inverted'} = $q->{'inverted'};
+		$digitaloutput{'inverted'} = $q->{'inverted'} if ($q->{'inverted'} ne "");
 
 		# Save
 		push @{$cfg->{'digital_outputs'}}, \%digitaloutput;
@@ -246,7 +250,7 @@ if( $q->{action} eq "digitalinput" ) {
 			$error = "Name '" . $q->{'name'} . "' already exists. Names must be unique.";
 		}
 	}
-	# Edit existing output
+	# Edit existing input
 	if (!$error && $q->{'edit'}) {
 		my @searchresult = $jsonobj->find( $cfg->{'digital_inputs'}, "\$_->{'name'} eq \"" . $q->{'edit'} . "\"" );
 		my $elemKey = $searchresult[0];
@@ -267,10 +271,11 @@ if( $q->{action} eq "digitalinput" ) {
 		$digitalinput{'inverted'} = $q->{'inverted'};
 		$digitalinput{'pullup'} = "true" if ($q->{'resistor'} eq "pullup");
 		$digitalinput{'pulldown'} = "true" if ($q->{'resistor'} eq "pulldown");
-		$digitalinput{'bouncetime'} = $q->{'bouncetime'} if ($q->{'bouncetime'} > 0);
+		$digitalinput{'bouncetime'} = int($q->{'bouncetime'}) if ($q->{'bouncetime'} ne "");
 		$digitalinput{'interrupt'} = $q->{'interrupt'} if ($q->{'interrupt'} ne "none" );
-		$digitalinput{'poll_interval'} = $q->{'pollinterval'} if ($q->{'pollinterval'} > 0);
-		$digitalinput{'poll_when_interrupt_for'} = "true" if ($q->{'pollinterval'} > 0 && $q->{'interruptfor'} && $q->{'interruptfor'} ne "none" );
+		$digitalinput{'poll_interval'} = $q->{'pollinterval'} if ($q->{'pollinterval'} ne "");
+		$digitalinput{'poll_interval'} =~ tr/,/./;
+		$digitalinput{'poll_when_interrupt_for'} = "true" if ($q->{'pollinterval'} ne "" && $q->{'interruptfor'} && $q->{'interruptfor'} ne "none" );
 		my @interruptsfor;
 		if ($q->{'interruptfor'} && $q->{'interruptfor'} ne "none") {
 			my @searchresultintfor = $jsonobj->find( $cfg->{'digital_inputs'}, "\$_->{'module'} eq \"" . $q->{'interruptfor'} . "\"" );

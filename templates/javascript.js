@@ -100,7 +100,7 @@ function servicestop() {
 		}
 	})
 	.always(function( data ) {
-		console.log( "Servicerestart Finished", data );
+		console.log( "Servicestop Finished", data );
 		nopidrefresh = "0";
 	});
 }
@@ -259,7 +259,7 @@ function popup_add_digitaloutput() {
 	$("#form_digitaloutput_" + module)[0].reset();
 	$("#edit_digitaloutput_" + module).val('');
 	$("#savinghint_digitaloutput_" + module).html('&nbsp;');
-	$('#gpiomodule_digitaloutput_' + module).val(modulename);	
+	$('#gpiomodule_digitaloutput_' + module).val(modulename);
 	// Open Popup
 	$( "#popup_digitaloutput_" + module ).popup( "open" )
 
@@ -308,8 +308,8 @@ function popup_edit_digitaloutput(digitaloutputname) {
 				$("#name_digitaloutput_" + module).val(item.name);
 				$("#gpiomodule_digitaloutput_" + module).val(item.module);
 				$("#pin_digitaloutput_" + module).val(item.pin).selectmenu('refresh',true);
-				$("#payload_on_digitaloutput_" + module).val(item.on_payload);
-				$("#payload_off_digitaloutput_" + module).val(item.off_payload);
+				$("#on_payload_digitaloutput_" + module).val(item.on_payload);
+				$("#off_payload_digitaloutput_" + module).val(item.off_payload);
 				if ( item.inverted == "true" ) {
 					$("#inverted_digitaloutput_" + module).prop('checked', true).checkboxradio('refresh');
 				} else {
@@ -354,8 +354,8 @@ function add_digitaloutput(module) {
 				name: $("#name_digitaloutput_" + module).val(),
 				module: $("#gpiomodule_digitaloutput_" + module).val(),
 				pin: $("#pin_digitaloutput_" + module).val(),
-				payload_on: $("#payload_on_digitaloutput_" + module).val(),
-				payload_off: $("#payload_off_digitaloutput_" + module).val(),
+				payload_on: $("#on_payload_digitaloutput_" + module).val(),
+				payload_off: $("#off_payload_digitaloutput_" + module).val(),
 				inverted: invertedchecked,
 				initial: $("#initial_digitaloutput_" + module).val(),
 				timed_ms: $("#timed_ms_digitaloutput_" + module).val(),
@@ -461,7 +461,7 @@ function popup_add_digitalinput() {
 	})
 	.done(function( data ) {
 		console.log( "popup_add_digitalinput Success", data );
-		nmodules = data.gpio_modules;
+		modules = data.gpio_modules;
 		if ( data.error || jQuery.isEmptyObject(modules)) {
 			modules = undefined;
 			$("#moduleslist_digitalinput_" + module).html('<TMPL_VAR "INPUTS.HINT_NO_MODULES">');
@@ -1005,16 +1005,6 @@ function delete_sensorinput() {
 
 }
 
-
-
-
-
-
-
-
-
-
-
 // GET CONFIG
 
 function getconfig() {
@@ -1165,7 +1155,7 @@ function getconfig() {
 		$('#sensormodules-list').empty();
 		if ( data.error || jQuery.isEmptyObject(modules)) {
 			$('#sensormodules-list').html("<TMPL_VAR SENSORS.HINT_NO_MODULES>");
-			$('#sensorinputs-list').html("<TMPL_VAR SENSORINPUTS.HINT_NO_MODULES>");
+			$('#sensorinputs-list').html("<TMPL_VAR SENSORINPUTS.HINT_NO_INPUTS>");
 			modules = undefined;
 			return;
 		}
