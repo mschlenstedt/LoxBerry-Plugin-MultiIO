@@ -1190,7 +1190,7 @@ function getconfig() {
 		});
 		$("#sensorinput_module").trigger("change");
 
-		// Inputs
+		// Sensor Inputs
 
 		console.log( "Parse Item for SENSORINPUTS" );
 		inputs = data.sensor_inputs;
