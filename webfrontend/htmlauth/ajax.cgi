@@ -12,7 +12,7 @@ my $response;
 my $cgi = CGI->new;
 my $q = $cgi->Vars;
 
-print STDERR Dumper $q;
+#print STDERR Dumper $q;
 
 my $log = LoxBerry::Log->new (
     name => 'AJAX',
@@ -280,10 +280,23 @@ if( $q->{action} eq "digitalinput" ) {
 		if ($q->{'interruptfor'} && $q->{'interruptfor'} ne "none") {
 			my @searchresultintfor = $jsonobj->find( $cfg->{'digital_inputs'}, "\$_->{'module'} eq \"" . $q->{'interruptfor'} . "\"" );
 			foreach (@searchresultintfor) {
-				print STDERR $cfg->{'digital_inputs'}[$_]->{'name'} . "\n";
 				push @interruptsfor, $cfg->{'digital_inputs'}[$_]->{'name'};
 			}
 			$digitalinput{'interrupt_for'} = \@interruptsfor;
+		}
+		# Adjust "interrupt_for" if somewhere defined for this module
+		if ($q->{'interrupt'} ne "none" && $q->{'interrupt'} ne "" && (!$q->{'interruptfor'}) || $q->{'interruptfor'} eq "none") {
+			my $i = -1;
+			foreach (@{$cfg->{'digital_inputs'}}) {
+				$i++;
+				next if !$cfg->{'digital_inputs'}[$i]->{'interrupt_for'};
+				my $firstfoundname = $cfg->{'digital_inputs'}[$i]->{'interrupt_for'}[0];
+				my @searchresultfirstname = $jsonobj->find( $cfg->{'digital_inputs'}, "\$_->{'name'} eq \"" . $firstfoundname . "\"" );
+				my @interruptsfor = @{$cfg->{'digital_inputs'}[$i]->{'interrupt_for'}};
+				push @interruptsfor, $q->{'name'};
+				$cfg->{'digital_inputs'}[$i]->{'interrupt_for'} = \@interruptsfor;
+				last;
+			}
 		}
 
 		# Save
