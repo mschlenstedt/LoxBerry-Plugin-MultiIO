@@ -31,8 +31,7 @@
       "loggers" : {
          "mqtt_io" : {
             "handlers" : [
-               "console",
-               "file"
+               "console"
             ],
             "level" : "INFO",
             "propagate" : true
@@ -42,5 +41,8 @@
    },
    "mqtt" : {
       "topic_prefix" : "multiio"
+   },
+   "options" : {
+      "install_requirements" : "false"
    }
 }

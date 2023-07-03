@@ -148,7 +148,7 @@ function popup_edit_gpiomodule(modulename) {
 				$("#name_" + item.module).val(item.name);
                                 $("#module_" + item.module).val(item.module);
 				$("#i2c_bus_num_" + item.module).val(item.i2c_bus_num).selectmenu('refresh',true);
-				$("#chipaddr_" + item.module).val(item.chipaddr).selectmenu('refresh',true);
+				$("#chip_addr_" + item.module).val(item.chip_addr).selectmenu('refresh',true);
                                 $("#edit_" + item.module).val(item.name);
 				$("#popup_gpio_module_" + item.module ).popup( "open" );
 			}
@@ -316,7 +316,7 @@ function popup_edit_digitaloutput(digitaloutputname) {
 					$("#inverted_digitaloutput_" + module).prop('checked', false).checkboxradio('refresh');
 				}
 				$("#initial_digitaloutput_" + module).val(item.initial).selectmenu('refresh',true);
-				$("#timed_ms_digitaloutput_" + module).val(item.timed_ms);
+				$("#timed_ms_digitaloutput_" + module).val(item.timed_set_ms);
 				$("#edit_digitaloutput_" + module).val(item.name);
 				// Open Popup
 				$("#savinghint_digitaloutput_" + module).html('&nbsp;');
@@ -1028,6 +1028,17 @@ function getconfig() {
 
 		console.log( "Parse Item for GPIO_MODULES" );
 		modules = data.gpio_modules;
+		// Sort by module, then by name: https://medium.com/developer-rants/sorting-json-structures-by-multiple-fields-in-javascript-60ed96704df7
+		modules = modules.sort((a, b) => {
+			let retval = 0;
+			if (a.module < b.module)
+				retval = -1;
+			if (a.module > b.module)
+				retval = 1;
+			if (retval === 0)
+				retval = a.name < b.name ? -1 : 1;
+			return retval;
+		});
 		$('#gpiomodules-list').empty();
 		if ( data.error || jQuery.isEmptyObject(modules)) {
 			$('#gpiomodules-list').html("<TMPL_VAR GPIOS.HINT_NO_MODULES>");
@@ -1074,6 +1085,17 @@ function getconfig() {
 
 		console.log( "Parse Item for OUTPUTS" );
 		outputs = data.digital_outputs;
+		// Sort by module, then by name: https://medium.com/developer-rants/sorting-json-structures-by-multiple-fields-in-javascript-60ed96704df7
+		outputs = outputs.sort((a, b) => {
+			let retval = 0;
+			if (a.module < b.module)
+				retval = -1;
+			if (a.module > b.module)
+				retval = 1;
+			if (retval === 0)
+				retval = a.name < b.name ? -1 : 1;
+			return retval;
+		});
 		$('#digitaloutputs-list').empty();
 		if ( data.error || jQuery.isEmptyObject(outputs)) {
 			$('#digitaloutputs-list').html("<TMPL_VAR OUTPUTS.HINT_NO_OUTPUTS>");
@@ -1113,6 +1135,17 @@ function getconfig() {
 
 		console.log( "Parse Item for INPUTS" );
 		inputs = data.digital_inputs;
+		// Sort by module, then by name: https://medium.com/developer-rants/sorting-json-structures-by-multiple-fields-in-javascript-60ed96704df7
+		inputs = inputs.sort((a, b) => {
+			let retval = 0;
+			if (a.module < b.module)
+				retval = -1;
+			if (a.module > b.module)
+				retval = 1;
+			if (retval === 0)
+				retval = a.name < b.name ? -1 : 1;
+			return retval;
+		});
 		$('#digitalinputs-list').empty();
 		if ( data.error || jQuery.isEmptyObject(inputs)) {
 			$('#digitalinputs-list').html("<TMPL_VAR INPUTS.HINT_NO_INPUTS>");
@@ -1152,6 +1185,17 @@ function getconfig() {
 
 		console.log( "Parse Item for SENSOR_MODULES" );
 		modules = data.sensor_modules;
+		// Sort by module, then by name: https://medium.com/developer-rants/sorting-json-structures-by-multiple-fields-in-javascript-60ed96704df7
+		modules = modules.sort((a, b) => {
+			let retval = 0;
+			if (a.module < b.module)
+				retval = -1;
+			if (a.module > b.module)
+				retval = 1;
+			if (retval === 0)
+				retval = a.name < b.name ? -1 : 1;
+			return retval;
+		});
 		$('#sensormodules-list').empty();
 		if ( data.error || jQuery.isEmptyObject(modules)) {
 			$('#sensormodules-list').html("<TMPL_VAR SENSORS.HINT_NO_MODULES>");
@@ -1194,6 +1238,17 @@ function getconfig() {
 
 		console.log( "Parse Item for SENSORINPUTS" );
 		inputs = data.sensor_inputs;
+		// Sort by module, then by name: https://medium.com/developer-rants/sorting-json-structures-by-multiple-fields-in-javascript-60ed96704df7
+		inputs = inputs.sort((a, b) => {
+			let retval = 0;
+			if (a.module < b.module)
+				retval = -1;
+			if (a.module > b.module)
+				retval = 1;
+			if (retval === 0)
+				retval = a.name < b.name ? -1 : 1;
+			return retval;
+		});
 		$('#sensorinputs-list').empty();
 		if ( data.error || jQuery.isEmptyObject(inputs)) {
 			console.log("Ja");

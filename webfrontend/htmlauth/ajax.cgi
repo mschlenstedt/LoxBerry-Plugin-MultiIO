@@ -189,7 +189,7 @@ if( $q->{action} eq "digitaloutput" ) {
 			publish_initial => 'true',
 		);
 		# Optional
-		$digitaloutput{'timed_ms'} = int($q->{'timed_ms'}) if ($q->{'timed_ms'} ne "");
+		$digitaloutput{'timed_set_ms'} = int($q->{'timed_ms'}) if ($q->{'timed_ms'} ne "" && $q->{'timed_ms'} > 0);
 		$digitaloutput{'initial'} = $q->{'initial'} if ($q->{'initial'} ne "");
 		$digitaloutput{'on_payload'} = $q->{'payload_on'} ne "ON" ? $q->{'payload_on'} : "ON";
 		$digitaloutput{'off_payload'} = $q->{'payload_off'} ne "OFF" ? $q->{'payload_off'} : "OFF";

@@ -107,7 +107,7 @@ sub form_gpios
 	close $fh;
 
 	my $options;
-	foreach (@files) {
+	foreach (sort @files) {
 		if ( $_ =~ /.*\.html/ ) {
 			$template = $template .= LoxBerry::System::read_file("$lbptemplatedir/gpiomodules/$_");
 			$_ =~ s/\.html//g;
@@ -120,7 +120,7 @@ sub form_gpios
 	my @files = readdir($fh);
 	close $fh;
 
-	foreach (@files) {
+	foreach (sort @files) {
 		if ( $_ =~ /.*\.html/ ) {
 			$template = $template .= LoxBerry::System::read_file("$lbptemplatedir/digitaloutputs/$_");
 			$_ =~ s/\.html//g;
@@ -132,7 +132,7 @@ sub form_gpios
 	my @files = readdir($fh);
 	close $fh;
 
-	foreach (@files) {
+	foreach (sort @files) {
 		if ( $_ =~ /.*\.html/ ) {
 			$template = $template .= LoxBerry::System::read_file("$lbptemplatedir/digitalinputs/$_");
 			$_ =~ s/\.html//g;
@@ -160,7 +160,7 @@ sub form_sensors
 	close $fh;
 
 	my $options;
-	foreach (@files) {
+	foreach (sort @files) {
 		if ( $_ =~ /.*\.html/ ) {
 			$template = $template .= LoxBerry::System::read_file("$lbptemplatedir/sensormodules/$_");
 			$_ =~ s/\.html//g;
@@ -173,7 +173,7 @@ sub form_sensors
 	my @files = readdir($fh);
 	close $fh;
 
-	foreach (@files) {
+	foreach (sort @files) {
 		if ( $_ =~ /.*\.html/ ) {
 			$template = $template .= LoxBerry::System::read_file("$lbptemplatedir/sensorinputs/$_");
 			$_ =~ s/\.html//g;
