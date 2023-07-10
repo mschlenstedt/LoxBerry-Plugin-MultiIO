@@ -1,2 +1,2 @@
 # LoxBerry-Plugin-MultiIO
-A LoxBerry Plugin. LoxWiki: https://www.loxwiki.eu/
+A LoxBerry Plugin. https://wiki.loxberry.de/plugins/multi_io/start
