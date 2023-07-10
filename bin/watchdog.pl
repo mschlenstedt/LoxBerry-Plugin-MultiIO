@@ -7,10 +7,10 @@ use LoxBerry::JSON;
 use Getopt::Long;
 #use warnings;
 #use strict;
-use Data::Dumper;
+#use Data::Dumper;
 
 # Version of this script
-my $version = "0.9.0";
+my $version = "0.9.1";
 
 # Globals
 my $error;
@@ -37,7 +37,7 @@ if ($verbose) {
 LOGSTART "Starting Watchdog";
 
 # Lock
-my $status = LoxBerry::System::lock(lockfile => 'multiio-watchdog', wait => 120);
+my $status = LoxBerry::System::lock(lockfile => 'multiio-watchdog', wait => 900);
 if ($status) {
 	LOGCRIT "$status currently running - Quitting.";
 	exit (1);
@@ -157,6 +157,7 @@ sub start
 
 	$mqttiolog->default;
 	LOGSTART "Starting MQTT IO...";
+	LOGINF "Starting MQTT IO...";
 	system ("pkill -f 'python3 -m mqtt_io'");
 	sleep 2;
 	system ("python3 -m mqtt_io /dev/shm/mqttio.yaml >> $logfile 2>&1 &");

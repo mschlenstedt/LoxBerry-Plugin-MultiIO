@@ -292,6 +292,7 @@ if( $q->{action} eq "digitalinput" ) {
 				next if !$cfg->{'digital_inputs'}[$i]->{'interrupt_for'};
 				my $firstfoundname = $cfg->{'digital_inputs'}[$i]->{'interrupt_for'}[0];
 				my @searchresultfirstname = $jsonobj->find( $cfg->{'digital_inputs'}, "\$_->{'name'} eq \"" . $firstfoundname . "\"" );
+				next if $cfg->{'digital_inputs'}[$searchresultfirstname[0]]->{'module'} ne $q->{'module'}; # Not for me
 				my @interruptsfor = @{$cfg->{'digital_inputs'}[$i]->{'interrupt_for'}};
 				push @interruptsfor, $q->{'name'};
 				$cfg->{'digital_inputs'}[$i]->{'interrupt_for'} = \@interruptsfor;

@@ -4,7 +4,7 @@ var nopidrefresh = "0";
 
 $(function() {
 	
-//	interval = window.setInterval(function(){ servicestatus(); }, 3000);
+	interval = window.setInterval(function(){ servicestatus(); }, 3000);
 	servicestatus();
 	getconfig();
 
