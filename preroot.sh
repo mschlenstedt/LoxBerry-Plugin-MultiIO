@@ -45,29 +45,29 @@ PBIN=$LBPBIN/$PDIR
 echo "<INFO> Installation as root user started."
 
 echo "<INFO> Start installing pip3..."
-yes | python3 -m pip install --upgrade pip
-INSTALLED=$(pip3 list --format=columns | grep "pip" | grep -v grep | wc -l)
-if [ ${INSTALLED} -ne "0" ]; then
-	echo "<OK> Python Pip installed successfully."
-else
-	echo "<WARNING> Python Pip installation failed! The plugin will not work without."
-	echo "<WARNING> Giving up."
-	exit 2;
-fi 
+yes | python3.5 -m pip install --upgrade pip
+#INSTALLED=$(pip3 list --format=columns | grep "pip" | grep -v grep | wc -l)
+#if [ ${INSTALLED} -ne "0" ]; then
+#	echo "<OK> Python Pip installed successfully."
+#else
+#	echo "<WARNING> Python Pip installation failed! The plugin will not work without."
+#	echo "<WARNING> Giving up."
+#	exit 2;
+#fi 
 
 echo "<INFO> Start installing Python MQTT-IO..."
-yes | python3 -m pip install --upgrade mqtt-io
-INSTALLED=$(pip3 list --format=columns | grep "mqtt-io" | grep -v grep | wc -l)
-if [ ${INSTALLED} -ne "0" ]; then
-	echo "<OK> Python MQTT-IO installed successfully."
-else
-	echo "<WARNING> Python MQTT-IO installation failed! The plugin will not work without."
-	echo "<WARNING> Giving up."
-	exit 2;
-fi 
+yes | python3.5 -m pip install --upgrade mqtt-io
+#INSTALLED=$(pip3 list --format=columns | grep "mqtt-io" | grep -v grep | wc -l)
+#if [ ${INSTALLED} -ne "0" ]; then
+#	echo "<OK> Python MQTT-IO installed successfully."
+#else
+#	echo "<WARNING> Python MQTT-IO installation failed! The plugin will not work without."
+#	echo "<WARNING> Giving up."
+#	exit 2;
+#fi 
 
 echo "<INFO> Start installing Python Modules..."
-yes | python3 -m pip install --upgrade RPi.GPIO pcf8575 pcf8574 adafruit_circuitpython_mcp230xx Adafruit_DHT adafruit-circuitpython-ads1x15 adafruit-circuitpython-ahtx0 smbus2 RPi.bme280 bme680 w1thermsensor pi-ina219 adafruit-mcp3008
+yes | python3.5 -m pip install --upgrade RPi.GPIO pcf8575 pcf8574 adafruit_circuitpython_mcp230xx Adafruit_DHT adafruit-circuitpython-ads1x15 adafruit-circuitpython-ahtx0 smbus2 RPi.bme280 bme680 w1thermsensor pi-ina219 adafruit-mcp3008
 
 echo "<INFO> Add user 'loxberry' to different additional groups..."
 usermod -a -G gpio loxberry
