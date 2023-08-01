@@ -352,7 +352,7 @@ if( $q->{action} eq "sensormodule" ) {
 			$error = "Name '" . $q->{'name'} . "' already exists. Names must be unique.";
 		}
 	}
-	
+
 	# Edit existing  module
 	if (!$error && $q->{'edit'}) {
 		my @searchresult = $jsonobj->find( $cfg->{'sensor_modules'}, "\$_->{'name'} eq \"" . $q->{'edit'} . "\"" );
@@ -374,9 +374,16 @@ if( $q->{action} eq "sensormodule" ) {
 		);
 		# Optional
 		#$module{'i2c_bus_num'} = $q->{'i2c_bus_num'} if ($q->{'i2c_bus_num'} ne "");
-		#$module{'chip_addr'} = $q->{'chip_addr'} if ($q->{'chip_addr'} ne "");
+		$module{'chip_addr'} = $q->{'chip_addr'} if ($q->{'chip_addr'} ne "");
 		$module{'pin'} = $q->{'pin'} if ($q->{'pin'} ne "");
 		$module{'type'} = $q->{'type'} if ($q->{'type'} ne "");
+		$module{'gain'} = $q->{'gain'} if ($q->{'gain'} ne "");
+		my @pins;
+		push (@pins, 0) if $q->{'pin0'} eq "true";
+		push (@pins, 1) if $q->{'pin1'} eq "true";
+		push (@pins, 2) if $q->{'pin2'} eq "true";
+		push (@pins, 3) if $q->{'pin3'} eq "true";
+		$module{'pins'} = \@pins if scalar @pins > 0;
 		# Save
 		push @{$cfg->{'sensor_modules'}}, \%module;
 		$jsonobj->write();
@@ -451,6 +458,10 @@ if( $q->{action} eq "sensorinput" ) {
 		);
 		# Optional
 		$sensorinput{'type'} = $q->{'type'} if ($q->{'type'} ne "");
+		$sensorinput{'pin'} = $q->{'pin'} if ($q->{'pin'} ne "");
+		$sensorinput{'pin_trigger'} = $q->{'pin_trigger'} if ($q->{'pin_trigger'} ne "");
+		$sensorinput{'pin_echo'} = $q->{'pin_echo'} if ($q->{'pin_echo'} ne "");
+		$sensorinput{'burst'} = $q->{'burst'} if ($q->{'burst'} ne "");
 		$sensorinput{'interval'} = int($q->{'interval'}) if ($q->{'interval'} ne "");
 
 		# Save

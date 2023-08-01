@@ -735,10 +735,18 @@ function popup_edit_sensormodule(modulename) {
 		$.each( modules, function( intDevId, item){
 			if (item.name == modulename) {
 				$("#name_" + item.module).val(item.name);
-                                $("#module_" + item.module).val(item.module);
+				$("#module_" + item.module).val(item.module);
 				$("#pin_" + item.module).val(item.pin).selectmenu('refresh',true);
 				$("#type_" + item.module).val(item.type).selectmenu('refresh',true);
-                                $("#edit_" + item.module).val(item.name);
+				$("#gain_" + item.module).val(item.gain).selectmenu('refresh',true);
+				$("#chip_addr_" + item.module).val(item.chip_addr).selectmenu('refresh',true);
+				if (item.pins) {
+					if (item.pins.includes(0)) { $("#pin0_" + item.module ).prop("checked", true).checkboxradio("refresh") };
+					if (item.pins.includes(1)) { $("#pin1_" + item.module ).prop("checked", true).checkboxradio("refresh") };
+					if (item.pins.includes(2)) { $("#pin2_" + item.module ).prop("checked", true).checkboxradio("refresh") };
+					if (item.pins.includes(3)) { $("#pin3_" + item.module ).prop("checked", true).checkboxradio("refresh") };
+				}
+				$("#edit_" + item.module).val(item.name);
 				$("#popup_sensor_module_" + item.module ).popup( "open" );
 			}
 		});
@@ -754,7 +762,7 @@ function popup_edit_sensormodule(modulename) {
 function add_sensormodule(module) {
 
 	$("#savinghint_" + module).attr("style", "color:blue").html("<TMPL_VAR "COMMON.HINT_SAVING">");
-	$.ajax( { 
+	$.ajax( {
 			url:  'ajax.cgi',
 			type: 'POST',
 			data: { 
@@ -762,7 +770,13 @@ function add_sensormodule(module) {
 				name: $("#name_" + module).val(),
 				module: $("#module_" + module).val(),
 				type: $("#type_" + module).val(),
+				gain: $("#gain_" + module).val(),
+				chip_addr: $("#chip_addr_" + module).val(),
 				pin: $("#pin_" + module).val(),
+				pin0: $("#pin0_" + module).is(":checked"),
+				pin1: $("#pin1_" + module).is(":checked"),
+				pin2: $("#pin2_" + module).is(":checked"),
+				pin3: $("#pin3_" + module).is(":checked"),
 				edit: $("#edit_" + module).val(),
 			}
 		} )
@@ -780,7 +794,7 @@ function add_sensormodule(module) {
 			getconfig();
 			// Close Popup
 			$("#popup_sensor_module_" + module).popup( "close" );
-			$( "#form_" + module )[0].reset();
+			$("#form_" + module )[0].reset();
 			$("#savinghint_" + module).html('&nbsp;');
 		}
 	})
@@ -836,7 +850,7 @@ function delete_sensormodule() {
 
 }
 
-// ADD SENSOR INPUT: Popup
+// ADD SENSORINPUT: Popup
 
 function popup_add_sensorinput() {
 
@@ -854,7 +868,7 @@ function popup_add_sensorinput() {
 
 }
 
-// EDIT SENSOR INPUT: Popup
+// EDIT SENSORINPUT: Popup
 
 function popup_edit_sensorinput(sensorinputname) {
 
@@ -897,6 +911,10 @@ function popup_edit_sensorinput(sensorinputname) {
 				$("#name_sensorinput_" + module).val(item.name);
 				$("#sensormodule_sensorinput_" + module).val(item.module);
 				$("#type_sensorinput_" + module).val(item.type).selectmenu('refresh',true);
+				$("#pin_sensorinput_" + module).val(item.pin).selectmenu('refresh',true);
+				$("#pin_trigger_sensorinput_" + module).val(item.pin_trigger).selectmenu('refresh',true);
+				$("#pin_echo_sensorinput_" + module).val(item.pin_echo).selectmenu('refresh',true);
+				$("#burst_sensorinput_" + module).val(item.burst);
 				$("#interval_sensorinput_" + module).val(item.interval);
 				$("#edit_sensorinput_" + module).val(item.name);
 				// Open Popup
@@ -911,7 +929,7 @@ function popup_edit_sensorinput(sensorinputname) {
 
 }
 
-// ADD/EDIT DIGITAL OUTPUT (save to config)
+// ADD/EDIT SENSORINPUT (save to config)
 
 function add_sensorinput(module) {
 
@@ -930,6 +948,10 @@ function add_sensorinput(module) {
 				name: $("#name_sensorinput_" + module).val(),
 				module: $("#sensormodule_sensorinput_" + module).val(),
 				type: $("#type_sensorinput_" + module).val(),
+				pin: $("#pin_sensorinput_" + module).val(),
+				pin_trigger: $("#pin_trigger_sensorinput_" + module).val(),
+				pin_echo: $("#pin_echo_sensorinput_" + module).val(),
+				burst: $("#burst_sensorinput_" + module).val(),
 				interval: $("#interval_sensorinput_" + module).val(),
 				edit: $("#edit_sensorinput_" + module).val(),
 			}
@@ -1045,41 +1067,41 @@ function getconfig() {
 			$('#digitaloutputs-list').html("<TMPL_VAR OUTPUTS.HINT_NO_OUTPUTS>");
 			$('#digitalinputs-list').html("<TMPL_VAR INPUTS.HINT_NO_INPUTS>");
 			modules = undefined;
-			return;
-		}
-		// Create table
-		var table = $('<table style="min-width:200px; width:100%" width="100%" data-role="table" id="gpiomodulestable" data-mode="reflow" class="ui-responsive table-stripe ui-body-b">').appendTo('#gpiomodules-list');
-		// Add the header row
-		var theader = $('<thead />').appendTo(table);
-		var theaderrow = $('<tr class="ui-bar-b"/>').appendTo(theader);
-		$('<th style="text-align:left; width:40%; padding:5px;"><TMPL_VAR COMMON.LABEL_NAME><\/th>').appendTo(theaderrow);
-		$('<th style="text-align:left; width:40%; padding:5px;"><TMPL_VAR GPIOS.LABEL_MODULE><\/th>').appendTo(theaderrow);
-		$('<th style="text-align:left; width:20%; padding:5px;"><TMPL_VAR COMMON.LABEL_ACTIONS><\/th>').appendTo(theaderrow);
-		// Create table body.
-		var tbody = $('<tbody />').appendTo(table);
-		// Add the data rows to the table body and dropdown lists
-		$('#digitaloutput_module').empty();
-		$('#digitalinput_module').empty();
-		$.each( modules, function( intDevId, item){
-			// Dropdown list for Digital inputs/outputs
-			$('<option value=\'' + item.name + ',' + item.module + '\'>' + item.name + '</option/>').appendTo('#digitaloutput_module');
-			$('<option value=\'' + item.name + ',' + item.module + '\'>' + item.name + '</option/>').appendTo('#digitalinput_module');
-			// Table
-			var row = $('<tr />').appendTo(tbody);
-			$('<td style="text-align:left;">'+item.name+'<\/td>').appendTo(row);
-			$('<td style="text-align:left;">'+item.module+'<\/td>').appendTo(row);
-			$('<td />', { html: '\
-			<a href="javascript:popup_edit_gpiomodule(\'' + item.name + '\')" id="btneditgpiomodule_'+item.name+'" name="btneditgpiomodule_'+item.name+'" \
-			title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
-			<img src="./images/settings_20.png" height="20"></img></a> \
-			<a href="javascript:popup_delete_gpiomodule(\'' + item.name + '\')" id="btnaskdeletegpiomodule_'+item.name+'" name="btnaskdeletegpiomodule_'+item.name+'" \
-			title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
-			<img src="./images/cancel_20.png" height="20"></img></a> \
-			' }).appendTo(row);
-			$(row).trigger("create");
-		});
-		$("#digitaloutput_module").trigger("change");
-		$("#digitalinput_module").trigger("change");
+		} else {
+			// Create table
+			var table = $('<table style="min-width:200px; width:100%" width="100%" data-role="table" id="gpiomodulestable" data-mode="reflow" class="ui-responsive table-stripe ui-body-b">').appendTo('#gpiomodules-list');
+			// Add the header row
+			var theader = $('<thead />').appendTo(table);
+			var theaderrow = $('<tr class="ui-bar-b"/>').appendTo(theader);
+			$('<th style="text-align:left; width:40%; padding:5px;"><TMPL_VAR COMMON.LABEL_NAME><\/th>').appendTo(theaderrow);
+			$('<th style="text-align:left; width:40%; padding:5px;"><TMPL_VAR GPIOS.LABEL_MODULE><\/th>').appendTo(theaderrow);
+			$('<th style="text-align:left; width:20%; padding:5px;"><TMPL_VAR COMMON.LABEL_ACTIONS><\/th>').appendTo(theaderrow);
+			// Create table body.
+			var tbody = $('<tbody />').appendTo(table);
+			// Add the data rows to the table body and dropdown lists
+			$('#digitaloutput_module').empty();
+			$('#digitalinput_module').empty();
+			$.each( modules, function( intDevId, item){
+				// Dropdown list for Digital inputs/outputs
+				$('<option value=\'' + item.name + ',' + item.module + '\'>' + item.name + '</option/>').appendTo('#digitaloutput_module');
+				$('<option value=\'' + item.name + ',' + item.module + '\'>' + item.name + '</option/>').appendTo('#digitalinput_module');
+				// Table
+				var row = $('<tr />').appendTo(tbody);
+				$('<td style="text-align:left;">'+item.name+'<\/td>').appendTo(row);
+				$('<td style="text-align:left;">'+item.module+'<\/td>').appendTo(row);
+				$('<td />', { html: '\
+				<a href="javascript:popup_edit_gpiomodule(\'' + item.name + '\')" id="btneditgpiomodule_'+item.name+'" name="btneditgpiomodule_'+item.name+'" \
+				title="<TMPL_VAR COMMON.BUTTON_EDIT> ' + item.name + '"> \
+				<img src="./images/settings_20.png" height="20"></img></a> \
+				<a href="javascript:popup_delete_gpiomodule(\'' + item.name + '\')" id="btnaskdeletegpiomodule_'+item.name+'" name="btnaskdeletegpiomodule_'+item.name+'" \
+				title="<TMPL_VAR COMMON.BUTTON_DELETE> ' + item.name + '"> \
+				<img src="./images/cancel_20.png" height="20"></img></a> \
+				' }).appendTo(row);
+				$(row).trigger("create");
+			});
+			$("#digitaloutput_module").trigger("change");
+			$("#digitalinput_module").trigger("change");
+		};
 
 		// Outputs
 
@@ -1181,7 +1203,7 @@ function getconfig() {
 			});
 		};
 
-		// SENSOR Modules
+		// Sensor Modules
 
 		console.log( "Parse Item for SENSOR_MODULES" );
 		modules = data.sensor_modules;
@@ -1251,7 +1273,6 @@ function getconfig() {
 		});
 		$('#sensorinputs-list').empty();
 		if ( data.error || jQuery.isEmptyObject(inputs)) {
-			console.log("Ja");
 			$('#sensorinputs-list').html("<TMPL_VAR SENSORINPUTS.HINT_NO_INPUTS>");
 			inputs = undefined;
 		} else {

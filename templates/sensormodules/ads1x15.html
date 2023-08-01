@@ -1,0 +1,90 @@
+<div data-role="popup" id="popup_sensor_module_ads1x15" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
+	<form id="form_ads1x15">
+		<h3 class="boxtitle ui-title">
+			<span style="vertical-align:middle"><img src="./images/chip_title_32.png"></span>
+			<TMPL_VAR SENSORS.LABEL_TITLE_SENSORMODULE>: ads1x15
+		</h3>
+
+		<div class="box">
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR COMMON.LABEL_NAME>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="name_ads1x15" data-mini="true" value="" placeholder="<TMPL_VAR COMMON.LABEL_NAME_HINT>">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR GPIOS.LABEL_CHIPADDR>	
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="chip_addr_ads1x15" id="chip_addr_ads1x15" data-mini="true">
+							<option value="0x48" selected>0x48</option>
+							<option value="0x49">0x49</option>
+							<option value="0x4A">0x4A</option>
+							<option value="0x4B">0x4B</option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_TYPE>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="type_ads1x15" id="type_ads1x15" data-mini="true">
+							<option value="ADS1015">ADS1015</option>
+							<option value="ADS1115" selected>ADS1115</option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_PINS>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
+							<input type="checkbox" name="pin0_ads1x15" id="pin0_ads1x15" width="100%">
+							<label for="pin0_ads1x15">Pin 0</label>
+							<input type="checkbox" name="pin1_ads1x15" id="pin1_ads1x15">
+							<label for="pin1_ads1x15">Pin 1</label>
+							<input type="checkbox" name="pin2_ads1x15" id="pin2_ads1x15">
+							<label for="pin2_ads1x15">Pin 2</label>
+							<input type="checkbox" name="pin3_ads1x15" id="pin3_ads1x15">
+							<label for="pin3_ads1x15">Pin 3</label>
+						</fieldset>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_GAIN>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="gain_ads1x15" id="gain_ads1x15" data-mini="true">
+							<option value="0.6666666666666666">2/3</option>
+							<option value="1" selected>1</option>
+							<option value="2">2</option>
+							<option value="4">4</option>
+							<option value="8">8</option>
+							<option value="16">16</option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<input type="hidden" id="edit_ads1x15" value="">
+						<input type="hidden" id="module_ads1x15" value="ads1x15">
+						<a href="#" onclick="add_sensormodule('ads1x15'); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_SAVE"></a>
+						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
+						&nbsp;&nbsp;<a href="#" onclick="window.open('./scan_i2c.cgi', 'NewWindow1','scrollbars=true,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no,width=800,height=600')" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-search ui-corner-all"><TMPL_VAR "GPIOS.BUTTON_SCANBUS"></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<span id="savinghint_ads1x15">&nbsp;</span>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+
