@@ -55,6 +55,19 @@ else
 	exit 2;
 fi 
 
+echo "<INFO> Start installing PyYAML with workaround from here: https://github.com/flyte/mqtt-io/issues/334"
+echo 'Cython < 3.0' > /tmp/constraint.txt
+PIP_CONSTRAINT=/tmp/constraint.txt yes | python3 -m pip install 'PyYAML==5.4.1'
+rm  /tmp/constraint.txt
+INSTALLED=$(pip3 list --format=columns | grep "PyYAML" | grep -v grep | wc -l)
+if [ ${INSTALLED} -ne "0" ]; then
+	echo "<OK> Python PyYAML installed successfully."
+else
+	echo "<WARNING> Python PyYAML installation failed! The plugin will not work without."
+	echo "<WARNING> Giving up."
+	exit 2;
+fi 
+
 echo "<INFO> Start installing Python MQTT-IO..."
 yes | python3 -m pip install --upgrade mqtt-io
 INSTALLED=$(pip3 list --format=columns | grep "mqtt-io" | grep -v grep | wc -l)
