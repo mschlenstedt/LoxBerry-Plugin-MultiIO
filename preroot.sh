@@ -82,6 +82,14 @@ fi
 echo "<INFO> Start installing Python Modules..."
 yes | python3 -m pip install --upgrade RPi.GPIO pcf8575 pcf8574 adafruit_circuitpython_mcp230xx Adafruit_DHT adafruit-circuitpython-ads1x15 adafruit-circuitpython-ahtx0 smbus2 RPi.bme280 bme680 w1thermsensor pi-ina219 adafruit-mcp3008
 
+# Following packages are for some special boards only
+if [ -e /boot/dietpi/.hw_model ]; then
+	. /boot/dietpi/.hw_model
+fi
+if [ $G_HW_MODEL -lt 10 ]; then # Raspberrys
+	yes | python3 -m pip install --upgrade Adafruit_DHT
+fi
+
 echo "<INFO> Add user 'loxberry' to different additional groups..."
 usermod -a -G gpio loxberry
 usermod -a -G i2c loxberry
