@@ -90,6 +90,12 @@ if [ $G_HW_MODEL -lt 10 ]; then # Raspberrys
 	yes | python3 -m pip install --upgrade Adafruit_DHT
 fi
 
+if [ -e "/usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/ads1x15.py" ]; then
+	echo "<INFO> Install ads1x15 Bugfix as long as it is not in the main mqtt-io branch..."
+	mv /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/ads1x15.py /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/ads1x15.py.orig
+	mv $PDATA/ads1x15.py /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/ads1x15.py
+fi
+
 echo "<INFO> Add user 'loxberry' to different additional groups..."
 usermod -a -G gpio loxberry
 usermod -a -G i2c loxberry
