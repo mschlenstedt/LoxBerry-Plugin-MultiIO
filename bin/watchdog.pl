@@ -219,8 +219,9 @@ sub check
 		my $response = LoxBerry::System::write_file("/dev/shm/multiio-watchdog-fails.dat", "0");
 	}
 
-	my ($exitcode, $output)  = execute ("pgrep -f 'python3 -m mqtt_io'");
-
+#	my ($exitcode, $output)  = execute ("pgrep -f 'python3 -m mqtt_io'");
+	my $output = qx(pgrep -f mqtt_io);
+	my $exitcode  = $? >> 8;
 	if ($exitcode != 0) {
 		LOGWARN "MQTT IO seems to be dead - Error $exitcode";
 		my $fails = LoxBerry::System::read_file("/dev/shm/multiio-watchdog-fails.dat");
