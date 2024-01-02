@@ -77,6 +77,11 @@ if( $q->{ajax} ) {
 		$template = LoxBerry::System::read_file($templatefile);
 		&form_sensors();
 	}
+	elsif ($q->{form} eq "mqtt") {
+		my $templatefile = "$lbptemplatedir/mqtt_settings.html";
+		$template = LoxBerry::System::read_file($templatefile);
+		&form_mqtt();
+	}
 	elsif ($q->{form} eq "logs") {
 		my $templatefile = "$lbptemplatedir/log_settings.html";
 		$template = LoxBerry::System::read_file($templatefile);
@@ -189,6 +194,18 @@ sub form_sensors
 	return();
 }
 
+##########################################################################
+# Form: Mqtt
+##########################################################################
+
+sub form_mqtt
+{
+	# Prepare template
+	&preparetemplate();
+
+	return();
+}
+
 
 ##########################################################################
 # Form: Log
@@ -235,6 +252,10 @@ sub preparetemplate
 	$navbar{20}{Name} = "$L{'COMMON.LABEL_SENSORS'}";
 	$navbar{20}{URL} = 'index.cgi?form=sensors';
 	$navbar{20}{active} = 1 if $q->{form} eq "sensors";
+
+	$navbar{30}{Name} = "$L{'COMMON.LABEL_MQTT'}";
+	$navbar{30}{URL} = 'index.cgi?form=mqtt';
+	$navbar{30}{active} = 1 if $q->{form} eq "mqtt";
 
 	$navbar{98}{Name} = "$L{'COMMON.LABEL_LOGS'}";
 	$navbar{98}{URL} = 'index.cgi?form=logs';

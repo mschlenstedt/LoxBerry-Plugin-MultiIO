@@ -373,11 +373,15 @@ if( $q->{action} eq "sensormodule" ) {
 			module => $q->{'module'},
 		);
 		# Optional
-		#$module{'i2c_bus_num'} = $q->{'i2c_bus_num'} if ($q->{'i2c_bus_num'} ne "");
+		$module{'i2c_bus_num'} = $q->{'i2c_bus_num'} if ($q->{'i2c_bus_num'} ne "");
 		$module{'chip_addr'} = $q->{'chip_addr'} if ($q->{'chip_addr'} ne "");
 		$module{'pin'} = $q->{'pin'} if ($q->{'pin'} ne "");
 		$module{'type'} = $q->{'type'} if ($q->{'type'} ne "");
 		$module{'gain'} = $q->{'gain'} if ($q->{'gain'} ne "");
+		$module{'shunt_ohms'} = $q->{'shunt_ohms'} if ($q->{'shunt_ohms'} ne "");
+		$module{'max_amps'} = $q->{'max_amps'} if ($q->{'max_amps'} ne "");
+		$module{'voltage_range'} = $q->{'voltage_range'} if ($q->{'voltage_range'} ne "");
+		$module{'low_power'} = "True" if ($q->{'low_power'} eq "true");
 		my @pins;
 		push (@pins, 0) if $q->{'pin0'} eq "true";
 		push (@pins, 1) if $q->{'pin1'} eq "true";
@@ -462,6 +466,7 @@ if( $q->{action} eq "sensorinput" ) {
 		$sensorinput{'pin_trigger'} = $q->{'pin_trigger'} if ($q->{'pin_trigger'} ne "");
 		$sensorinput{'pin_echo'} = $q->{'pin_echo'} if ($q->{'pin_echo'} ne "");
 		$sensorinput{'burst'} = $q->{'burst'} if ($q->{'burst'} ne "");
+		$sensorinput{'oversampling'} = $q->{'oversampling'} if ($q->{'oversampling'} ne "");
 		$sensorinput{'interval'} = int($q->{'interval'}) if ($q->{'interval'} ne "");
 
 		# Save

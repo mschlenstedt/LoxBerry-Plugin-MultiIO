@@ -736,10 +736,15 @@ function popup_edit_sensormodule(modulename) {
 			if (item.name == modulename) {
 				$("#name_" + item.module).val(item.name);
 				$("#module_" + item.module).val(item.module);
+				$("#shunt_ohms_" + item.module).val(item.shunt_ohms);
+				$("#max_amps_" + item.module).val(item.max_amps);
 				$("#pin_" + item.module).val(item.pin).selectmenu('refresh',true);
 				$("#type_" + item.module).val(item.type).selectmenu('refresh',true);
 				$("#gain_" + item.module).val(item.gain).selectmenu('refresh',true);
+				$("#voltage_range_" + item.module).val(item.voltage_range).selectmenu('refresh',true);
 				$("#chip_addr_" + item.module).val(item.chip_addr).selectmenu('refresh',true);
+				$("#i2c_bus_num_" + item.module).val(item.i2c_bus_num).selectmenu('refresh',true);
+				if (item.low_power) { $("#low_power_" + item.module ).prop("checked", true).checkboxradio("refresh") };
 				if (item.pins) {
 					if (item.pins.includes(0)) { $("#pin0_" + item.module ).prop("checked", true).checkboxradio("refresh") };
 					if (item.pins.includes(1)) { $("#pin1_" + item.module ).prop("checked", true).checkboxradio("refresh") };
@@ -771,7 +776,12 @@ function add_sensormodule(module) {
 				module: $("#module_" + module).val(),
 				type: $("#type_" + module).val(),
 				gain: $("#gain_" + module).val(),
+				shunt_ohms: $("#shunt_ohms_" + module).val(),
+				max_amps: $("#max_amps_" + module).val(),
+				voltage_range: $("#voltage_range_" + module).val(),
+				low_power: $("#low_power_" + module).is(":checked"),
 				chip_addr: $("#chip_addr_" + module).val(),
+				i2c_bus_num: $("#i2c_bus_num_" + module).val(),
 				pin: $("#pin_" + module).val(),
 				pin0: $("#pin0_" + module).is(":checked"),
 				pin1: $("#pin1_" + module).is(":checked"),
@@ -915,6 +925,7 @@ function popup_edit_sensorinput(sensorinputname) {
 				$("#pin_trigger_sensorinput_" + module).val(item.pin_trigger).selectmenu('refresh',true);
 				$("#pin_echo_sensorinput_" + module).val(item.pin_echo).selectmenu('refresh',true);
 				$("#burst_sensorinput_" + module).val(item.burst);
+				$("#oversampling_sensorinput_" + module).val(item.oversampling).selectmenu('refresh',true);
 				$("#interval_sensorinput_" + module).val(item.interval);
 				$("#edit_sensorinput_" + module).val(item.name);
 				// Open Popup
@@ -952,6 +963,7 @@ function add_sensorinput(module) {
 				pin_trigger: $("#pin_trigger_sensorinput_" + module).val(),
 				pin_echo: $("#pin_echo_sensorinput_" + module).val(),
 				burst: $("#burst_sensorinput_" + module).val(),
+				oversampling: $("#oversampling_sensorinput_" + module).val(),
 				interval: $("#interval_sensorinput_" + module).val(),
 				edit: $("#edit_sensorinput_" + module).val(),
 			}
@@ -1045,6 +1057,11 @@ function getconfig() {
 	.done(function( data ) {
 		console.log( "getconfig Success", data );
 		$("#main").css( 'visibility', 'visible' );
+
+		// MQTT
+
+		console.log( "Parse Item for MQTT Settings" );
+		$("#topic").val(data.mqtt.topic_prefix);
 
 		// GPIO Modules
 
