@@ -55,19 +55,6 @@ else
 	exit 2;
 fi 
 
-echo "<INFO> Start installing PyYAML with workaround from here: https://github.com/flyte/mqtt-io/issues/334"
-echo 'Cython < 3.0' > /tmp/constraint.txt
-yes | PIP_CONSTRAINT=/tmp/constraint.txt python3 -m pip install 'PyYAML==5.4.1'
-rm  /tmp/constraint.txt
-INSTALLED=$(pip3 list --format=columns | grep "PyYAML" | grep -v grep | wc -l)
-if [ ${INSTALLED} -ne "0" ]; then
-	echo "<OK> Python PyYAML installed successfully."
-else
-	echo "<WARNING> Python PyYAML installation failed! The plugin will not work without."
-	echo "<WARNING> Giving up."
-	exit 2;
-fi 
-
 echo "<INFO> Start installing Python MQTT-IO..."
 yes | python3 -m pip install --upgrade mqtt-io
 INSTALLED=$(pip3 list --format=columns | grep "mqtt-io" | grep -v grep | wc -l)
@@ -85,15 +72,11 @@ yes | python3 -m pip install --upgrade RPi.GPIO pcf8575 pcf8574 adafruit_circuit
 # Following packages are for some special boards only
 if [ -e /boot/dietpi/.hw_model ]; then
 	. /boot/dietpi/.hw_model
+else # Old installations are from Raspbian, so we are definetely on a Rapsberry
+	G_HW_MODEL=9
 fi
 if [ $G_HW_MODEL -lt 10 ]; then # Raspberrys
 	yes | python3 -m pip install --upgrade Adafruit_DHT
-fi
-
-if [ -e "/usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/ads1x15.py" ]; then
-	echo "<INFO> Install ads1x15 Bugfix as long as it is not in the main mqtt-io branch..."
-	mv /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/ads1x15.py /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/ads1x15.py.orig
-	mv $PDATA/ads1x15.py /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/ads1x15.py
 fi
 
 echo "<INFO> Add user 'loxberry' to different additional groups..."
