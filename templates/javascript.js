@@ -741,6 +741,7 @@ function popup_edit_sensormodule(modulename) {
 				$("#pin_" + item.module).val(item.pin).selectmenu('refresh',true);
 				$("#type_" + item.module).val(item.type).selectmenu('refresh',true);
 				$("#gain_" + item.module).val(item.gain).selectmenu('refresh',true);
+				$("#output_g_" + item.module).val(item.output_g).selectmenu('refresh',true);
 				$("#voltage_range_" + item.module).val(item.voltage_range).selectmenu('refresh',true);
 				$("#chip_addr_" + item.module).val(item.chip_addr).selectmenu('refresh',true);
 				$("#i2c_bus_num_" + item.module).val(item.i2c_bus_num).selectmenu('refresh',true);
@@ -778,6 +779,7 @@ function add_sensormodule(module) {
 				gain: $("#gain_" + module).val(),
 				shunt_ohms: $("#shunt_ohms_" + module).val(),
 				max_amps: $("#max_amps_" + module).val(),
+				output_g: $("#output_g_" + module).val(),
 				voltage_range: $("#voltage_range_" + module).val(),
 				low_power: $("#low_power_" + module).is(":checked"),
 				chip_addr: $("#chip_addr_" + module).val(),

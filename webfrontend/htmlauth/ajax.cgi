@@ -382,6 +382,7 @@ if( $q->{action} eq "sensormodule" ) {
 		$module{'max_amps'} = $q->{'max_amps'} if ($q->{'max_amps'} ne "");
 		$module{'voltage_range'} = $q->{'voltage_range'} if ($q->{'voltage_range'} ne "");
 		$module{'low_power'} = "True" if ($q->{'low_power'} eq "true");
+		$module{'output_g'} = "True" if ($q->{'output_g'} eq "true");
 		my @pins;
 		push (@pins, 0) if $q->{'pin0'} eq "true";
 		push (@pins, 1) if $q->{'pin1'} eq "true";
