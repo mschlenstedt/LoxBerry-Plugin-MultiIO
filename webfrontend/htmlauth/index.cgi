@@ -82,6 +82,11 @@ if( $q->{ajax} ) {
 		$template = LoxBerry::System::read_file($templatefile);
 		&form_mqtt();
 	}
+	elsif ($q->{form} eq "upgrade") {
+		my $templatefile = "$lbptemplatedir/upgrade_settings.html";
+		$template = LoxBerry::System::read_file($templatefile);
+		&form_upgrade();
+	}
 	elsif ($q->{form} eq "logs") {
 		my $templatefile = "$lbptemplatedir/log_settings.html";
 		$template = LoxBerry::System::read_file($templatefile);
@@ -208,6 +213,19 @@ sub form_mqtt
 
 
 ##########################################################################
+# Form: Upgrade
+##########################################################################
+
+sub form_upgrade
+{
+	# Prepare template
+	&preparetemplate();
+
+	return();
+}
+
+
+##########################################################################
 # Form: Log
 ##########################################################################
 
@@ -256,6 +274,10 @@ sub preparetemplate
 	$navbar{30}{Name} = "$L{'COMMON.LABEL_MQTT'}";
 	$navbar{30}{URL} = 'index.cgi?form=mqtt';
 	$navbar{30}{active} = 1 if $q->{form} eq "mqtt";
+
+	$navbar{40}{Name} = "$L{'COMMON.LABEL_UPGRADE'}";
+	$navbar{40}{URL} = 'index.cgi?form=upgrade';
+	$navbar{40}{active} = 1 if $q->{form} eq "upgrade";
 
 	$navbar{98}{Name} = "$L{'COMMON.LABEL_LOGS'}";
 	$navbar{98}{URL} = 'index.cgi?form=logs';

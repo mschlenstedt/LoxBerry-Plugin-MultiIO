@@ -7,6 +7,7 @@ $(function() {
 	interval = window.setInterval(function(){ servicestatus(); }, 3000);
 	servicestatus();
 	getconfig();
+	update_ver();
 
 });
 
@@ -741,7 +742,7 @@ function popup_edit_sensormodule(modulename) {
 				$("#pin_" + item.module).val(item.pin).selectmenu('refresh',true);
 				$("#type_" + item.module).val(item.type).selectmenu('refresh',true);
 				$("#gain_" + item.module).val(item.gain).selectmenu('refresh',true);
-				$("#output_g_" + item.module).val(item.output_g).selectmenu('refresh',true);
+				if (item.output_g) { $("#output_g_" + item.module).val(item.output_g).selectmenu('refresh',true) };
 				$("#voltage_range_" + item.module).val(item.voltage_range).selectmenu('refresh',true);
 				$("#chip_addr_" + item.module).val(item.chip_addr).selectmenu('refresh',true);
 				$("#i2c_bus_num_" + item.module).val(item.i2c_bus_num).selectmenu('refresh',true);
@@ -1039,6 +1040,64 @@ function delete_sensorinput() {
 		console.log( "add_sensorinput Finished", data );
 	});
 
+}
+
+// UPGRADE - VERSIONS
+
+function update_ver()
+{
+	$("#currentversion").html("<TMPL_VAR COMMON.HINT_UPDATING>");
+	$("#availableversion").html("<TMPL_VAR COMMON.HINT_UPDATING>");
+	$.ajax( { 
+			url:  'ajax.cgi',
+			type: 'POST',
+			data: { 
+				action: 'getversions',
+			}
+		} )
+	.done(function(resp) {
+		console.log( "getversions", "success", resp );
+		$("#currentversion").html(resp.versions.current);
+		$("#availableversion").html(resp.versions.available);
+		$(".UPGRADE").removeClass("ui-state-disabled");
+	})
+	.fail(function(resp) {
+		console.log( "getversions", "fail", resp );
+	})
+	.always(function(resp) {
+		console.log( "getversions", "finished", resp );
+	});
+
+}
+
+// UPGRADE (save to config)
+
+function upgrade() {
+	$(".UPGRADE").addClass("ui-state-disabled");
+	$("#currentversion").html("<TMPL_VAR COMMON.HINT_UPDATING>");
+	$("#availableversion").html("<TMPL_VAR COMMON.HINT_UPDATING>");
+	$("#savinghint_upgrade").attr("style", "color:blue").html("<TMPL_VAR UPGRADE.HINT_SAVE_SAVING>");
+	console.log ("Upgrading MQTT-IO");
+	$.ajax( { 
+			url:  'ajax.cgi',
+			type: 'POST',
+			data: { 
+				action: 'upgrade',
+			}
+		} )
+	.fail(function( data ) {
+		console.log( "upgrade Fail", data );
+		$("#savinghint_upgrade").attr("style", "color:red").html("<TMPL_VAR UPGRADE.HINT_SAVE_ERROR>: "+data.statusText);
+	})
+	.done(function( data ) {
+		console.log( "upgrade Success: ", data );
+		$("#savinghint_upgrade").attr("style", "color:green").html("<TMPL_VAR UPGRADE.HINT_SAVE_OK>");
+	})
+	.always(function( data ) {
+		update_ver();
+		$(".UPGRADE").removeClass("ui-state-disabled");
+		console.log( "upgrade Finished" );
+	});
 }
 
 // GET CONFIG

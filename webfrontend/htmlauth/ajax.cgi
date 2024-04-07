@@ -46,6 +46,16 @@ if( $q->{action} eq "servicestatus" ) {
 	$response = encode_json( \%response );
 }
 
+if( $q->{action} eq "getversions" ) {
+	my %versions;
+	my %response;
+	$versions{'current'} = execute("$lbpbindir/upgrade.sh current");
+	$versions{'available'} = execute("$lbpbindir/upgrade.sh available");
+	$response{'versions'} = \%versions;
+	chomp (%response);
+	$response = encode_json( \%response );
+}
+
 if( $q->{action} eq "getconfig" ) {
 	if ( -e "$lbpconfigdir/mqttio.json" ) {
 		$response = LoxBerry::System::read_file("$lbpconfigdir/mqttio.json");
@@ -56,6 +66,12 @@ if( $q->{action} eq "getconfig" ) {
 	else {
 		$response = "{ }";
 	}
+}
+
+if( $q->{action} eq "upgrade" ) {
+	my %response;
+	my ($exitcode, $output) = execute("sudo $lbpbindir/upgrade.sh");
+	$response = $exitcode;
 }
 
 if( $q->{action} eq "gpiomodule" ) {
@@ -381,8 +397,8 @@ if( $q->{action} eq "sensormodule" ) {
 		$module{'shunt_ohms'} = $q->{'shunt_ohms'} if ($q->{'shunt_ohms'} ne "");
 		$module{'max_amps'} = $q->{'max_amps'} if ($q->{'max_amps'} ne "");
 		$module{'voltage_range'} = $q->{'voltage_range'} if ($q->{'voltage_range'} ne "");
-		$module{'low_power'} = "True" if ($q->{'low_power'} eq "true");
-		$module{'output_g'} = "True" if ($q->{'output_g'} eq "true");
+		$module{'low_power'} = "true" if ($q->{'low_power'} eq "true");
+		$module{'output_g'} = "true" if ($q->{'output_g'} eq "true");
 		my @pins;
 		push (@pins, 0) if $q->{'pin0'} eq "true";
 		push (@pins, 1) if $q->{'pin1'} eq "true";
