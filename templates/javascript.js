@@ -1100,6 +1100,35 @@ function upgrade() {
 	});
 }
 
+// MQTT (save to config)
+
+function saveMQTT() {
+	$(".MQTT").addClass("ui-state-disabled");
+	$("#savinghint_mqtt").attr("style", "color:blue").html("<TMPL_VAR COMMON.HINT_SAVING>");
+	console.log ("Saving MQTT");
+	$.ajax( { 
+			url:  'ajax.cgi',
+			type: 'POST',
+			data: { 
+				action: 'savemqtt',
+				topic: $("#topic").val(),
+			}
+		} )
+	.fail(function( data ) {
+		console.log( "saving MQTT Fail", data );
+		$("#savinghint_mqtt").attr("style", "color:red").html("<TMPL_VAR COMMON.HINT_SAVING_FAILED>: "+data.statusText);
+	})
+	.done(function( data ) {
+		console.log( "saving MQTT Success: ", data );
+		$("#savinghint_mqtt").attr("style", "color:green").html("<TMPL_VAR COMMON.HINT_SAVING_SUCCESS>");
+	})
+	.always(function( data ) {
+		getconfig();
+		$(".MQTT").removeClass("ui-state-disabled");
+		console.log( "saving MQTT Finished" );
+	});
+}
+
 // GET CONFIG
 
 function getconfig() {

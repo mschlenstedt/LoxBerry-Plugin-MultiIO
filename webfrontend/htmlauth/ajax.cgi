@@ -74,6 +74,24 @@ if( $q->{action} eq "upgrade" ) {
 	$response = $exitcode;
 }
 
+if( $q->{action} eq "savemqtt" ) {
+
+	# Check if all required parameters are defined
+	if (!defined $q->{'topic'} || $q->{'topic'} eq "") {
+		$q->{'topic'} = "multiio";
+	}
+
+	# Load config
+	require LoxBerry::JSON;
+	my $cfgfile = "$lbpconfigdir/mqttio.json";
+	my $jsonobj = LoxBerry::JSON->new();
+	my $cfg = $jsonobj->open(filename => $cfgfile);
+	$cfg->{'mqtt'}->{'topic_prefix'} = $q->{'topic'};
+	$jsonobj->write();
+	my $resp = LoxBerry::System::write_file("$lbpconfigdir" . "/mqtt_subscriptions.cfg", $q->{'topic'} . "/#");
+	$response = 0;
+}
+
 if( $q->{action} eq "gpiomodule" ) {
 
 	# Check if all required parameters are defined
