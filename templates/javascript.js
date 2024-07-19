@@ -746,6 +746,10 @@ function popup_edit_sensormodule(modulename) {
 				$("#voltage_range_" + item.module).val(item.voltage_range).selectmenu('refresh',true);
 				$("#chip_addr_" + item.module).val(item.chip_addr).selectmenu('refresh',true);
 				$("#i2c_bus_num_" + item.module).val(item.i2c_bus_num).selectmenu('refresh',true);
+				$("#range_" + item.module).val(item.range).selectmenu('refresh',true);
+				$("#device_" + item.module).val(item.device);
+				$("#temperature_compensation_" + item.module).val(item.temperature_compensation);
+				$("#humidity_compensation_" + item.module).val(item.humidity_compensation);
 				if (item.low_power) { $("#low_power_" + item.module ).prop("checked", true).checkboxradio("refresh") };
 				if (item.pins) {
 					if (item.pins.includes(0)) { $("#pin0_" + item.module ).prop("checked", true).checkboxradio("refresh") };
@@ -785,6 +789,10 @@ function add_sensormodule(module) {
 				low_power: $("#low_power_" + module).is(":checked"),
 				chip_addr: $("#chip_addr_" + module).val(),
 				i2c_bus_num: $("#i2c_bus_num_" + module).val(),
+				temperature_compensation: $("#temperature_compensation_" + module).val(),
+				humidity_compensation: $("#humidity_compensation_" + module).val(),
+				device: $("#device_" + module).val(),
+				range: $("#range_" + module).val(),
 				pin: $("#pin_" + module).val(),
 				pin0: $("#pin0_" + module).is(":checked"),
 				pin1: $("#pin1_" + module).is(":checked"),

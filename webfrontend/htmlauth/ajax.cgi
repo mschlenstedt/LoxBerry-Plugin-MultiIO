@@ -24,12 +24,12 @@ LOGSTART "Request $q->{action}";
 
 
 if( $q->{action} eq "servicerestart" ) {
-	system ("$lbpbindir/watchdog.pl --action=restart > /dev/null 2>&1");
+	system ("$lbpbindir/watchdog.pl --action=restart --verbose=1 > /dev/null 2>&1");
 	$response = $?;
 }
 
 if( $q->{action} eq "servicestop" ) {
-	system ("$lbpbindir/watchdog.pl --action=stop > /dev/null 2>&1");
+	system ("$lbpbindir/watchdog.pl --action=stop --verbose=1 > /dev/null 2>&1");
 	$response = $?;
 }
 
@@ -417,6 +417,10 @@ if( $q->{action} eq "sensormodule" ) {
 		$module{'voltage_range'} = $q->{'voltage_range'} if ($q->{'voltage_range'} ne "");
 		$module{'low_power'} = "true" if ($q->{'low_power'} eq "true");
 		$module{'output_g'} = "true" if ($q->{'output_g'} eq "true");
+		$module{'range'} = $q->{'range'} if ($q->{'range'} ne "");
+		$module{'device'} = $q->{'device'} if ($q->{'device'} ne "");
+		$module{'temperature_compensation'} =  $q->{'temperature_compensation'} if ($q->{'temperature_compensation'} ne "");
+		$module{'humidity_compensation'} =  $q->{'humidity_compensation'} if ($q->{'humidity_compensation'} ne "");
 		my @pins;
 		push (@pins, 0) if $q->{'pin0'} eq "true";
 		push (@pins, 1) if $q->{'pin1'} eq "true";
