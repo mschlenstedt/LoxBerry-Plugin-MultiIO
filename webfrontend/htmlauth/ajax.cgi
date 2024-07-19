@@ -24,12 +24,12 @@ LOGSTART "Request $q->{action}";
 
 
 if( $q->{action} eq "servicerestart" ) {
-	system ("$lbpbindir/watchdog.pl --action=restart --verbose=1 > /dev/null 2>&1");
+	system ("$lbpbindir/watchdog.pl --action=restart > /dev/null 2>&1");
 	$response = $?;
 }
 
 if( $q->{action} eq "servicestop" ) {
-	system ("$lbpbindir/watchdog.pl --action=stop --verbose=1 > /dev/null 2>&1");
+	system ("$lbpbindir/watchdog.pl --action=stop > /dev/null 2>&1");
 	$response = $?;
 }
 
@@ -503,6 +503,7 @@ if( $q->{action} eq "sensorinput" ) {
 		$sensorinput{'burst'} = $q->{'burst'} if ($q->{'burst'} ne "");
 		$sensorinput{'oversampling'} = $q->{'oversampling'} if ($q->{'oversampling'} ne "");
 		$sensorinput{'interval'} = int($q->{'interval'}) if ($q->{'interval'} ne "");
+		$sensorinput{'factor'} = $q->{'factor'} if ($q->{'factor'} ne "");
 
 		# Save
 		push @{$cfg->{'sensor_inputs'}}, \%sensorinput;

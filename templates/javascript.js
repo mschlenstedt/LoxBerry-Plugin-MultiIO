@@ -930,6 +930,7 @@ function popup_edit_sensorinput(sensorinputname) {
 				$("#burst_sensorinput_" + module).val(item.burst);
 				$("#oversampling_sensorinput_" + module).val(item.oversampling).selectmenu('refresh',true);
 				$("#interval_sensorinput_" + module).val(item.interval);
+				$("#factor_sensorinput_" + module).val(item.factor);
 				$("#edit_sensorinput_" + module).val(item.name);
 				// Open Popup
 				$("#savinghint_sensorinput_" + module).html('&nbsp;');
@@ -963,6 +964,7 @@ function add_sensorinput(module) {
 				module: $("#sensormodule_sensorinput_" + module).val(),
 				type: $("#type_sensorinput_" + module).val(),
 				pin: $("#pin_sensorinput_" + module).val(),
+				factor: $("#factor_sensorinput_" + module).val(),
 				pin_trigger: $("#pin_trigger_sensorinput_" + module).val(),
 				pin_echo: $("#pin_echo_sensorinput_" + module).val(),
 				burst: $("#burst_sensorinput_" + module).val(),

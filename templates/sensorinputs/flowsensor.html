@@ -1,0 +1,91 @@
+<div data-role="popup" id="popup_sensorinput_flowsensor" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
+	<form id="form_sensorinput_flowsensor">
+		<h3 class="boxtitle ui-title">
+			<span style="vertical-align:middle"><img src="./images/chip_title_32.png"></span>
+			<TMPL_VAR SENSORINPUTS.LABEL_TITLE_SENSORINPUT>: flowsensor
+		</h3>
+
+		<div class="box">
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORINPUTS.LABEL_MODULENAME>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="sensormodule_sensorinput_flowsensor" data-mini="true" value="" disabled="disabled">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR COMMON.LABEL_NAME>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="name_sensorinput_flowsensor" data-mini="true" value="" placeholder="<TMPL_VAR COMMON.LABEL_NAME_HINT>">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_PIN>	
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="pin_sensorinput_flowsensor" id="pin_sensorinput_flowsensor" data-mini="true">
+							<option value="2">GPIO2</option>
+							<option value="3">GPIO3</option>
+							<option value="4">GPIO4</option>
+							<option value="5">GPIO5</option>
+							<option value="6">GPIO6</option>
+							<option value="7">GPIO7</option>
+							<option value="8">GPIO8</option>
+							<option value="9">GPIO9</option>
+							<option value="10">GPIO10</option>
+							<option value="11">GPIO11</option>
+							<option value="12">GPIO12</option>
+							<option value="13">GPIO13</option>
+							<option value="14">GPIO14</option>
+							<option value="15">GPIO15</option>
+							<option value="16">GPIO16</option>
+							<option value="17">GPIO17</option>
+							<option value="18">GPIO18</option>
+							<option value="19">GPIO19</option>
+							<option value="20">GPIO20</option>
+							<option value="21">GPIO21</option>
+							<option value="22">GPIO22</option>
+							<option value="23">GPIO23</option>
+							<option value="24">GPIO24</option>
+							<option value="25">GPIO25</option>
+							<option value="26">GPIO26</option>
+							<option value="27">GPIO27</option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORINPUTS.LABEL_FACTOR>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="factor_sensorinput_flowsensor" data-mini="true" value="7">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORINPUTS.LABEL_INTERVAL>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="interval_sensorinput_flowsensor" data-mini="true" value="10">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<input type="hidden" id="edit_sensorinput_flowsensor" value="">
+						<a href="#" onclick="add_sensorinput('flowsensor'); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_SAVE"></a>
+						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<span id="savinghint_sensorinput_flowsensor">&nbsp;</span>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+
