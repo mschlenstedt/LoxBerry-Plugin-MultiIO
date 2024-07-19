@@ -419,6 +419,12 @@ if( $q->{action} eq "sensormodule" ) {
 		$module{'output_g'} = "true" if ($q->{'output_g'} eq "true");
 		$module{'range'} = $q->{'range'} if ($q->{'range'} ne "");
 		$module{'device'} = $q->{'device'} if ($q->{'device'} ne "");
+		$module{'serial_port'} = $q->{'serial_port'} if ($q->{'serial_port'} ne "");
+		$module{'spi_port'} = $q->{'spi_port'} if ($q->{'spi_port'} ne "");
+		$module{'spi_device'} = $q->{'spi_device'} if ($q->{'spi_device'} ne "");
+		$module{'channel'} = $q->{'channel'} if ($q->{'channel'} ne "");
+		$module{'max_voltage'} = $q->{'max_voltage'} if ($q->{'max_voltage'} ne "");
+		$module{'differential'} = "true" if ($q->{'differential'} eq "true");
 		$module{'temperature_compensation'} =  $q->{'temperature_compensation'} if ($q->{'temperature_compensation'} ne "");
 		$module{'humidity_compensation'} =  $q->{'humidity_compensation'} if ($q->{'humidity_compensation'} ne "");
 		my @pins;

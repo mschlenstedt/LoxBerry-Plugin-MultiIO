@@ -1,0 +1,69 @@
+<div data-role="popup" id="popup_sensorinput_pms5003" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
+	<form id="form_sensorinput_pms5003">
+		<h3 class="boxtitle ui-title">
+			<span style="vertical-align:middle"><img src="./images/chip_title_32.png"></span>
+			<TMPL_VAR SENSORINPUTS.LABEL_TITLE_SENSORINPUT>: pms5003
+		</h3>
+
+		<div class="box">
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORINPUTS.LABEL_MODULENAME>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="sensormodule_sensorinput_pms5003" data-mini="true" value="" disabled="disabled">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR COMMON.LABEL_NAME>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="name_sensorinput_pms5003" data-mini="true" value="" placeholder="<TMPL_VAR COMMON.LABEL_NAME_HINT>">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_TYPE>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="type_sensorinput_pms5003" id="type_sensorinput_pms5003" data-mini="true">
+							<option value="pm10_cf1">pm10_cf1</option>
+							<option value="pm25_cf1">pm25_cf1</option>
+							<option value="pm100_cf1">pm100_cf1</option>
+							<option value="pm10_std">pm10_std</option>
+							<option value="pm25_std" selected>pm25_std</option>
+							<option value="pm100_std">pm100_std</option>
+							<option value="gr03um">gr03um</option>
+							<option value="gr05um">gr05um</option>
+							<option value="gr10um">gr10um</option>
+							<option value="gr25um">gr25um</option>
+							<option value="gr50um">gr50um</option>
+							<option value="gr100um">gr100um</option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORINPUTS.LABEL_INTERVAL>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="interval_sensorinput_pms5003" data-mini="true" value="60">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<input type="hidden" id="edit_sensorinput_pms5003" value="">
+						<a href="#" onclick="add_sensorinput('pms5003'); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_SAVE"></a>
+						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<span id="savinghint_sensorinput_pms5003">&nbsp;</span>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+

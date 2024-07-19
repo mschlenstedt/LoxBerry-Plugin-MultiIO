@@ -67,7 +67,7 @@ else
 fi 
 
 echo "<INFO> Start installing Python Modules..."
-yes | python3 -m pip install --upgrade RPi.GPIO pcf8575 pcf8574 adafruit_circuitpython_mcp230xx adafruit-circuitpython-ads1x15 adafruit-circuitpython-ahtx0 smbus2 RPi.bme280 bme680 w1thermsensor pi-ina219 adafruit-mcp3008 gpiozero adafruit-circuitpython-ens160
+yes | python3 -m pip install --upgrade RPi.GPIO pcf8575 pcf8574 adafruit_circuitpython_mcp230xx adafruit-circuitpython-ads1x15 adafruit-circuitpython-ahtx0 smbus2 RPi.bme280 bme680 w1thermsensor pi-ina219 adafruit-mcp3008 gpiozero adafruit-circuitpython-ens160 Adafruit-BMP plantower adafruit-circuitpython-sht4x
 
 # SPecial handling because Module is too old...
 yes | python3 -m pip install "setuptools<58.0.0" wheel
@@ -95,6 +95,9 @@ if [ -e /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor ]; then
 	wget https://raw.githubusercontent.com/flyte/mqtt-io/develop/mqtt_io/modules/sensor/yfs201.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/yfs201.py
 	wget https://raw.githubusercontent.com/flyte/mqtt-io/develop/mqtt_io/modules/sensor/mhz19.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/mhz19.py
 	wget https://raw.githubusercontent.com/flyte/mqtt-io/develop/mqtt_io/modules/sensor/ens160.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/ens160.py
+	wget https://raw.githubusercontent.com/flyte/mqtt-io/develop/mqtt_io/modules/sensor/bmp085.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/bmp085.py
+	wget https://raw.githubusercontent.com/flyte/mqtt-io/develop/mqtt_io/modules/sensor/pms5003.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/pms5003.py
+	wget https://raw.githubusercontent.com/flyte/mqtt-io/develop/mqtt_io/modules/sensor/sht4x.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/sht4x.py
 else
 	echo "<WARNING> No DietPi with Bookworm installation. Will not install additional modules."
 fi

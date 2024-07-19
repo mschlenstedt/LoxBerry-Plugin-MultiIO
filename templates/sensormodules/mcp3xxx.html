@@ -1,0 +1,96 @@
+<div data-role="popup" id="popup_sensor_module_mcp3xxx" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
+	<form id="form_mcp3xxx">
+		<h3 class="boxtitle ui-title">
+			<span style="vertical-align:middle"><img src="./images/chip_title_32.png"></span>
+			<TMPL_VAR SENSORS.LABEL_TITLE_SENSORMODULE>: mcp3xxx
+		</h3>
+
+		<div class="box">
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR COMMON.LABEL_NAME>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="name_mcp3xxx" data-mini="true" value="" placeholder="<TMPL_VAR COMMON.LABEL_NAME_HINT>">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_TYPE>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="type_mcp3xxx" id="type_mcp3xxx" data-mini="true">
+							<option value="MCP3001">MCP3001</option>
+							<option value="MCP3002">MCP3002</option>
+							<option value="MCP3004">MCP3004</option>
+							<option value="MCP3008">MCP3008</option>
+							<option value="MCP3201">MCP3201</option>
+							<option value="MCP3202">MCP3202</option>
+							<option value="MCP3204">MCP3204</option>
+							<option value="MCP3208">MCP3208</option>
+							<option value="MCP3301">MCP3301</option>
+							<option value="MCP3302">MCP3302</option>
+							<option value="MCP3304">MCP3304</option>
+							<option value="MCP3308">MCP3308</option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_SPIPORT>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="spi_port_mcp3xxx" data-mini="true" value="0" placeholder="<TMPL_VAR SENSORS.LABEL_SPIPORT_HINT>">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_SPIDEVICE>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="spi_device_mcp3xxx" data-mini="true" value="0" placeholder="<TMPL_VAR SENSORS.LABEL_SPIDEVICE_HINT>">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_CHANNEL>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="channel_mcp3xxx" data-mini="true" value="0" placeholder="<TMPL_VAR SENSORS.LABEL_CHANNEL_HINT>">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_MAXVOLTAGE>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="max_voltage_mcp3xxx" data-mini="true" value="3.3" placeholder="<TMPL_VAR SENSORS.LABEL_MAXVOLTAGE_HINT>">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+					</div>
+					<div class="boxitem" style="width:75%">
+						<fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
+							<input type="checkbox" name="differential_mcp3xxx" id="differential_mcp3xxx" width="100%">
+							<label for="differential_mcp3xxx"><TMPL_VAR SENSORS.LABEL_DIFFERENTIAL></label>
+						</fieldset>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<input type="hidden" id="edit_mcp3xxx" value="">
+						<input type="hidden" id="module_mcp3xxx" value="mcp3xxx">
+						<a href="#" onclick="add_sensormodule('mcp3xxx'); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_SAVE"></a>
+						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<span id="savinghint_mcp3xxx">&nbsp;</span>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+

@@ -1,0 +1,41 @@
+<div data-role="popup" id="popup_sensor_module_pms5003" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
+	<form id="form_pms5003">
+		<h3 class="boxtitle ui-title">
+			<span style="vertical-align:middle"><img src="./images/chip_title_32.png"></span>
+			<TMPL_VAR SENSORS.LABEL_TITLE_SENSORMODULE>: pms5003
+		</h3>
+
+		<div class="box">
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR COMMON.LABEL_NAME>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="name_pms5003" data-mini="true" value="" placeholder="<TMPL_VAR COMMON.LABEL_NAME_HINT>">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_SERIALPORT>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="serial_port_pms5003" data-mini="true" value="/dev/ttyS0" placeholder="<TMPL_VAR SENSORS.LABEL_SERIALPORT_HINT>">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<input type="hidden" id="edit_pms5003" value="">
+						<input type="hidden" id="module_pms5003" value="pms5003">
+						<a href="#" onclick="add_sensormodule('pms5003'); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_SAVE"></a>
+						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<span id="savinghint_pms5003">&nbsp;</span>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+

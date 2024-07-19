@@ -748,6 +748,12 @@ function popup_edit_sensormodule(modulename) {
 				$("#i2c_bus_num_" + item.module).val(item.i2c_bus_num).selectmenu('refresh',true);
 				$("#range_" + item.module).val(item.range).selectmenu('refresh',true);
 				$("#device_" + item.module).val(item.device);
+				$("#serial_port_" + item.module).val(item.serial_port);
+				$("#spi_port_" + item.module).val(item.spi_port);
+				$("#spi_device_" + item.module).val(item.spi_device);
+				$("#channel_" + item.module).val(item.channel);
+				$("#max_voltage_" + item.module).val(item.max_voltage);
+				if (item.differential) { $("#differential_" + item.module ).prop("checked", true).checkboxradio("refresh") };
 				$("#temperature_compensation_" + item.module).val(item.temperature_compensation);
 				$("#humidity_compensation_" + item.module).val(item.humidity_compensation);
 				if (item.low_power) { $("#low_power_" + item.module ).prop("checked", true).checkboxradio("refresh") };
@@ -792,7 +798,13 @@ function add_sensormodule(module) {
 				temperature_compensation: $("#temperature_compensation_" + module).val(),
 				humidity_compensation: $("#humidity_compensation_" + module).val(),
 				device: $("#device_" + module).val(),
+				serial_port: $("#serial_port_" + module).val(),
 				range: $("#range_" + module).val(),
+				spi_port: $("#spi_port_" + module).val(),
+				spi_device: $("#spi_device_" + module).val(),
+				channel: $("#channel_" + module).val(),
+				max_voltage: $("#max_voltage_" + module).val(),
+				differential: $("#differential_" + module).is(":checked"),
 				pin: $("#pin_" + module).val(),
 				pin0: $("#pin0_" + module).is(":checked"),
 				pin1: $("#pin1_" + module).is(":checked"),
