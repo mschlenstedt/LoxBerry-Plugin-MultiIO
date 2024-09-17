@@ -1,8 +1,8 @@
-<div data-role="popup" id="popup_sensorinput_yfs201" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
-	<form id="form_sensorinput_yfs201">
+<div data-role="popup" id="popup_sensorinput_flowsensor" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
+	<form id="form_sensorinput_flowsensor">
 		<h3 class="boxtitle ui-title">
 			<span style="vertical-align:middle"><img src="./images/chip_title_32.png"></span>
-			<TMPL_VAR SENSORINPUTS.LABEL_TITLE_SENSORINPUT>: yfs201
+			<TMPL_VAR SENSORINPUTS.LABEL_TITLE_SENSORINPUT>: flowsensor
 		</h3>
 
 		<div class="box">
@@ -11,7 +11,7 @@
 						<TMPL_VAR SENSORINPUTS.LABEL_MODULENAME>
 					</div>
 					<div class="boxitem" style="width:75%">
-						<input type="text" id="sensormodule_sensorinput_yfs201" data-mini="true" value="" disabled="disabled">
+						<input type="text" id="sensormodule_sensorinput_flowsensor" data-mini="true" value="" disabled="disabled">
 					</div>
 			</div>
 			<div class="boxrow">
@@ -19,7 +19,7 @@
 						<TMPL_VAR COMMON.LABEL_NAME>
 					</div>
 					<div class="boxitem" style="width:75%">
-						<input type="text" id="name_sensorinput_yfs201" data-mini="true" value="" placeholder="<TMPL_VAR COMMON.LABEL_NAME_HINT>">
+						<input type="text" id="name_sensorinput_flowsensor" data-mini="true" value="" placeholder="<TMPL_VAR COMMON.LABEL_NAME_HINT>">
 					</div>
 			</div>
 			<div class="boxrow">
@@ -27,7 +27,7 @@
 						<TMPL_VAR SENSORS.LABEL_PIN>	
 					</div>
 					<div class="boxitem" style="width:75%">
-						<select name="pin_sensorinput_yfs201" id="pin_sensorinput_yfs201" data-mini="true">
+						<select name="pin_sensorinput_flowsensor" id="pin_sensorinput_flowsensor" data-mini="true">
 							<option value="2">GPIO2</option>
 							<option value="3">GPIO3</option>
 							<option value="4">GPIO4</option>
@@ -62,19 +62,19 @@
 						<TMPL_VAR SENSORINPUTS.LABEL_INTERVAL>
 					</div>
 					<div class="boxitem" style="width:75%">
-						<input type="text" id="interval_sensorinput_yfs201" data-mini="true" value="10">
+						<input type="text" id="interval_sensorinput_flowsensor" data-mini="true" value="10">
 					</div>
 			</div>
 			<div class="boxrow">
 					<div class="boxitem small" style="width: 90%">
-						<input type="hidden" id="edit_sensorinput_yfs201" value="">
-						<a href="#" onclick="add_sensorinput('yfs201'); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_SAVE"></a>
+						<input type="hidden" id="edit_sensorinput_flowsensor" value="">
+						<a href="#" onclick="add_sensorinput('flowsensor'); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_SAVE"></a>
 						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
 					</div>
 			</div>
 			<div class="boxrow">
 					<div class="boxitem small" style="width: 90%">
-						<span id="savinghint_sensorinput_yfs201">&nbsp;</span>
+						<span id="savinghint_sensorinput_flowsensor">&nbsp;</span>
 					</div>
 			</div>
 		</div>

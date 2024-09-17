@@ -90,14 +90,8 @@ chmod 0755 $PBIN/upgrade.sh
 
 echo "<INFO> Installing new Sensor Modules until they are available in the official repo..."
 if [ -e /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor ]; then
-	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/flowsensor/mqtt_io/modules/sensor/flowsensor.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/flowsensor.py
-	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/frequencycounter/mqtt_io/modules/sensor/frequencycounter.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/frequencycounter.py
-	wget https://raw.githubusercontent.com/flyte/mqtt-io/develop/mqtt_io/modules/sensor/yfs201.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/yfs201.py
-	wget https://raw.githubusercontent.com/flyte/mqtt-io/develop/mqtt_io/modules/sensor/mhz19.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/mhz19.py
-	wget https://raw.githubusercontent.com/flyte/mqtt-io/develop/mqtt_io/modules/sensor/ens160.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/ens160.py
-	wget https://raw.githubusercontent.com/flyte/mqtt-io/develop/mqtt_io/modules/sensor/bmp085.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/bmp085.py
-	wget https://raw.githubusercontent.com/flyte/mqtt-io/develop/mqtt_io/modules/sensor/pms5003.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/pms5003.py
-	wget https://raw.githubusercontent.com/flyte/mqtt-io/develop/mqtt_io/modules/sensor/sht4x.py -o /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/sht4x.py
+	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/flowsensor/mqtt_io/modules/sensor/flowsensor.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/flowsensor.py
+	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/frequencycounter/mqtt_io/modules/sensor/frequencycounter.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/frequencycounter.py
 else
 	echo "<WARNING> No DietPi with Bookworm installation. Will not install additional modules."
 fi
