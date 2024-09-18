@@ -990,6 +990,7 @@ function add_sensorinput(module) {
 				burst: $("#burst_sensorinput_" + module).val(),
 				oversampling: $("#oversampling_sensorinput_" + module).val(),
 				interval: $("#interval_sensorinput_" + module).val(),
+				factor: $("#factor_sensorinput_" + module).val(),
 				edit: $("#edit_sensorinput_" + module).val(),
 			}
 		} )

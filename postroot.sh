@@ -92,6 +92,7 @@ echo "<INFO> Installing new Sensor Modules until they are available in the offic
 if [ -e /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor ]; then
 	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/flowsensor/mqtt_io/modules/sensor/flowsensor.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/flowsensor.py
 	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/frequencycounter/mqtt_io/modules/sensor/frequencycounter.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/frequencycounter.py
+	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/frequencycounter/mqtt_io/modules/sensor/veml7700.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/veml7700.py
 else
 	echo "<WARNING> No DietPi with Bookworm installation. Will not install additional modules."
 fi
