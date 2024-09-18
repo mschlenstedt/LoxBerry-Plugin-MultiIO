@@ -1,8 +1,8 @@
-<div data-role="popup" id="popup_sensor_module_veml7700" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
-	<form id="form_veml7700">
+<div data-role="popup" id="popup_sensor_module_tsl2561" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
+	<form id="form_tsl2561">
 		<h3 class="boxtitle ui-title">
 			<span style="vertical-align:middle"><img src="./images/chip_title_32.png"></span>
-			<TMPL_VAR SENSORS.LABEL_TITLE_SENSORMODULE>: veml7700
+			<TMPL_VAR SENSORS.LABEL_TITLE_SENSORMODULE>: tsl2561
 		</h3>
 
 		<div class="box">
@@ -11,7 +11,7 @@
 						<TMPL_VAR COMMON.LABEL_NAME>
 					</div>
 					<div class="boxitem" style="width:75%">
-						<input type="text" id="name_veml7700" data-mini="true" value="" placeholder="<TMPL_VAR COMMON.LABEL_NAME_HINT>">
+						<input type="text" id="name_tsl2561" data-mini="true" value="" placeholder="<TMPL_VAR COMMON.LABEL_NAME_HINT>">
 					</div>
 			</div>
 			<div class="boxrow">
@@ -19,7 +19,7 @@
 						<TMPL_VAR GPIOS.LABEL_CHIPADDR>	
 					</div>
 					<div class="boxitem" style="width:75%">
-						<select name="chip_addr_veml7700" id="chip_addr_veml7700" data-mini="true">
+						<select name="chip_addr_tsl2561" id="chip_addr_tsl2561" data-mini="true">
 							<option value="0x10" selected>0x10</option>
 						</select>
 					</div>
@@ -29,13 +29,10 @@
 						<TMPL_VAR SENSORS.LABEL_INTEGRATION_TIME>
 					</div>
 					<div class="boxitem" style="width:75%">
-						<select name="integration_time_veml7700" id="integration_time_veml7700" data-mini="true">
-							<option value="25" selected>25</option>
-							<option value="50">50</option>
-							<option value="100">100</option>
-							<option value="200">200</option>
-							<option value="400">400</option>
-							<option value="800">800</option>
+						<select name="integration_time_tsl2561" id="integration_time_tsl2561" data-mini="true">
+							<option value="13.7">13.7</option>
+							<option value="101" selected>101</option>
+							<option value="402">402</option>
 						</select>
 					</div>
 			</div>
@@ -44,26 +41,24 @@
 						<TMPL_VAR SENSORS.LABEL_GAIN>
 					</div>
 					<div class="boxitem" style="width:75%">
-						<select name="gain_veml7700" id="gain_veml7700" data-mini="true">
-							<option value="0.125" selected>0.125</option>
-							<option value="0.25">0.25</option>
-							<option value="1">1</option>
-							<option value="2">2</option>
+						<select name="gain_tsl2561" id="gain_tsl2561" data-mini="true">
+							<option value="1" selected>1</option>
+							<option value="16">16</option>
 						</select>
 					</div>
 			</div>
 			<div class="boxrow">
 					<div class="boxitem small" style="width: 90%">
-						<input type="hidden" id="edit_veml7700" value="">
-						<input type="hidden" id="module_veml7700" value="veml7700">
-						<a href="#" onclick="add_sensormodule('veml7700'); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_SAVE"></a>
+						<input type="hidden" id="edit_tsl2561" value="">
+						<input type="hidden" id="module_tsl2561" value="tsl2561">
+						<a href="#" onclick="add_sensormodule('tsl2561'); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_SAVE"></a>
 						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
 						&nbsp;&nbsp;<a href="#" onclick="window.open('./scan_i2c.cgi', 'NewWindow1','scrollbars=true,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no,width=800,height=600')" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-search ui-corner-all"><TMPL_VAR "GPIOS.BUTTON_SCANBUS"></a>
 					</div>
 			</div>
 			<div class="boxrow">
 					<div class="boxitem small" style="width: 90%">
-						<span id="savinghint_veml7700">&nbsp;</span>
+						<span id="savinghint_tsl2561">&nbsp;</span>
 					</div>
 			</div>
 		</div>

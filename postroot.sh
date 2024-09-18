@@ -67,7 +67,7 @@ else
 fi 
 
 echo "<INFO> Start installing Python Modules..."
-yes | python3 -m pip install --upgrade RPi.GPIO pcf8575 pcf8574 adafruit_circuitpython_mcp230xx adafruit-circuitpython-ads1x15 adafruit-circuitpython-ahtx0 smbus2 RPi.bme280 bme680 w1thermsensor pi-ina219 adafruit-mcp3008 gpiozero adafruit-circuitpython-ens160 Adafruit-BMP plantower adafruit-circuitpython-sht4x adafruit-circuitpython-veml7700
+yes | python3 -m pip install --upgrade RPi.GPIO pcf8575 pcf8574 adafruit_circuitpython_mcp230xx adafruit-circuitpython-ads1x15 adafruit-circuitpython-ahtx0 smbus2 RPi.bme280 bme680 w1thermsensor pi-ina219 adafruit-mcp3008 gpiozero adafruit-circuitpython-ens160 Adafruit-BMP plantower adafruit-circuitpython-sht4x adafruit-circuitpython-veml7700 adafruit-circuitpython-tsl2561
 
 # SPecial handling because Module is too old...
 yes | python3 -m pip install "setuptools<58.0.0" wheel
