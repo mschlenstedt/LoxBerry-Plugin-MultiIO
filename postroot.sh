@@ -67,7 +67,7 @@ else
 fi 
 
 echo "<INFO> Start installing Python Modules..."
-yes | python3 -m pip install --upgrade RPi.GPIO pcf8575 pcf8574 adafruit_circuitpython_mcp230xx adafruit-circuitpython-ads1x15 adafruit-circuitpython-ahtx0 smbus2 RPi.bme280 bme680 w1thermsensor pi-ina219 adafruit-mcp3008 gpiozero adafruit-circuitpython-ens160 Adafruit-BMP plantower adafruit-circuitpython-sht4x
+yes | python3 -m pip install --upgrade RPi.GPIO pcf8575 pcf8574 adafruit_circuitpython_mcp230xx adafruit-circuitpython-ads1x15 adafruit-circuitpython-ahtx0 smbus2 RPi.bme280 bme680 w1thermsensor pi-ina219 adafruit-mcp3008 gpiozero adafruit-circuitpython-ens160 Adafruit-BMP plantower adafruit-circuitpython-sht4x adafruit-circuitpython-veml7700
 
 # SPecial handling because Module is too old...
 yes | python3 -m pip install "setuptools<58.0.0" wheel
@@ -90,8 +90,6 @@ chmod 0755 $PBIN/upgrade.sh
 
 echo "<INFO> Installing new Sensor Modules until they are available in the official repo..."
 if [ -e /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor ]; then
-	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/flowsensor/mqtt_io/modules/sensor/flowsensor.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/flowsensor.py
-	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/frequencycounter/mqtt_io/modules/sensor/frequencycounter.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/frequencycounter.py
 	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/frequencycounter/mqtt_io/modules/sensor/veml7700.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/veml7700.py
 else
 	echo "<WARNING> No DietPi with Bookworm installation. Will not install additional modules."

@@ -412,6 +412,7 @@ if( $q->{action} eq "sensormodule" ) {
 		$module{'pin'} = $q->{'pin'} if ($q->{'pin'} ne "");
 		$module{'type'} = $q->{'type'} if ($q->{'type'} ne "");
 		$module{'gain'} = $q->{'gain'} if ($q->{'gain'} ne "");
+		$module{'integration_time'} = $q->{'integration_time'} if ($q->{'integration_time'} ne "");
 		$module{'shunt_ohms'} = $q->{'shunt_ohms'} if ($q->{'shunt_ohms'} ne "");
 		$module{'max_amps'} = $q->{'max_amps'} if ($q->{'max_amps'} ne "");
 		$module{'voltage_range'} = $q->{'voltage_range'} if ($q->{'voltage_range'} ne "");
