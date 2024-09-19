@@ -90,7 +90,7 @@ chmod 0755 $PBIN/upgrade.sh
 
 echo "<INFO> Installing new Sensor Modules until they are available in the official repo..."
 if [ -e /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor ]; then
-	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/frequencycounter/mqtt_io/modules/sensor/veml7700.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/veml7700.py
+	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/refs/heads/veml7700/mqtt_io/modules/sensor/veml7700.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/veml7700.py
 else
 	echo "<WARNING> No DietPi with Bookworm installation. Will not install additional modules."
 fi
