@@ -428,6 +428,15 @@ if( $q->{action} eq "sensormodule" ) {
 		$module{'differential'} = "true" if ($q->{'differential'} eq "true");
 		$module{'temperature_compensation'} =  $q->{'temperature_compensation'} if ($q->{'temperature_compensation'} ne "");
 		$module{'humidity_compensation'} =  $q->{'humidity_compensation'} if ($q->{'humidity_compensation'} ne "");
+		$module{'auto_filter'} =  $q->{'auto_filter'} if ($q->{'auto_filter'} ne "");
+		$module{'indoor'} =  $q->{'indoor'} if ($q->{'indoor'} ne "");
+		$module{'mask_disturber'} =  $q->{'mask_disturber'} if ($q->{'mask_disturber'} ne "");
+		$module{'lightning_threshold'} =  $q->{'lightning_threshold'} if ($q->{'lightning_threshold'} ne "");
+		$module{'watchdog_threshold'} =  $q->{'watchdog_threshold'} if ($q->{'watchdog_threshold'} ne "");
+		$module{'noise_level'} =  $q->{'noise_level'} if ($q->{'noise_level'} ne "");
+		$module{'spike_rejection'} =  $q->{'spike_rejection'} if ($q->{'spike_rejection'} ne "");
+		$module{'division_ratio'} =  $q->{'division_ratio'} if ($q->{'division_ratio'} ne "");
+		$module{'tune_cap'} =  $q->{'tune_cap'} if ($q->{'tune_cap'} ne "");
 		my @pins;
 		push (@pins, 0) if $q->{'pin0'} eq "true";
 		push (@pins, 1) if $q->{'pin1'} eq "true";

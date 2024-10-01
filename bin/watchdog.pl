@@ -143,7 +143,7 @@ sub start
 	# Convert to YAML
 	system ("cat /dev/shm/mqttio.json | $lbpbindir/helpers/json2yaml.py > /dev/shm/mqttio.yaml");
 	system ("chmod 600 /dev/shm/mqttio.yaml > /dev/null 2>&1");
-	system ("sed -i -e \"s#\\(.*:.*\\)'\\([[:alnum:]_-]*\\)'#\\1\\2#g\" /dev/shm/mqttio.yaml");
+	system ("sed -i -e \"s#\\(.*:.*\\)'\\([\\.[:alnum:]_-]*\\)'#\\1\\2#g\" /dev/shm/mqttio.yaml");
 	system ("sed -i -e \"s#\\(.*:.*\\)ON#\\1'ON'#g\" /dev/shm/mqttio.yaml"); # ON/OFF are always strings
 	system ("sed -i -e \"s#\\(.*:.*\\)OFF#\\1'OFF'#g\" /dev/shm/mqttio.yaml"); # ON/OFF are always strings
 	unlink ("/dev/shm/mqttio.json");

@@ -756,6 +756,15 @@ function popup_edit_sensormodule(modulename) {
 				if (item.differential) { $("#differential_" + item.module ).prop("checked", true).checkboxradio("refresh") };
 				$("#temperature_compensation_" + item.module).val(item.temperature_compensation);
 				$("#humidity_compensation_" + item.module).val(item.humidity_compensation);
+				$("#auto_filter_" + item.module).val(item.auto_filter).selectmenu('refresh',true);
+				$("#indoor_" + item.module).val(item.indoor).selectmenu('refresh',true);
+				$("#mask_disturber_" + item.module).val(item.mask_disturber).selectmenu('refresh',true);
+				$("#lightning_threshold_" + item.module).val(item.lightning_threshold).selectmenu('refresh',true);
+				$("#watchdog_threshold_" + item.module).val(item.watchdog_threshold).selectmenu('refresh',true);
+				$("#noise_level_" + item.module).val(item.noise_level).selectmenu('refresh',true);
+				$("#spike_rejection_" + item.module).val(item.spike_rejection).selectmenu('refresh',true);
+				$("#division_ratio_" + item.module).val(item.division_ratio).selectmenu('refresh',true);
+				$("#tune_cap_" + item.module).val(item.tune_cap).slider('refresh',true);
 				if (item.low_power) { $("#low_power_" + item.module ).prop("checked", true).checkboxradio("refresh") };
 				if (item.pins) {
 					if (item.pins.includes(0)) { $("#pin0_" + item.module ).prop("checked", true).checkboxradio("refresh") };
@@ -805,6 +814,15 @@ function add_sensormodule(module) {
 				channel: $("#channel_" + module).val(),
 				max_voltage: $("#max_voltage_" + module).val(),
 				differential: $("#differential_" + module).is(":checked"),
+				auto_filter: $("#auto_filter_" + module).val(),
+				indoor: $("#indoor_" + module).val(),
+				mask_disturber: $("#mask_disturber_" + module).val(),
+				lightning_threshold: $("#lightning_threshold_" + module).val(),
+				watchdog_threshold: $("#watchdog_threshold_" + module).val(),
+				noise_level: $("#noise_level_" + module).val(),
+				spike_rejection: $("#spike_rejection_" + module).val(),
+				division_ratio: $("#division_ratio_" + module).val(),
+				tune_cap: $("#tune_cap_" + module).val(),
 				pin: $("#pin_" + module).val(),
 				pin0: $("#pin0_" + module).is(":checked"),
 				pin1: $("#pin1_" + module).is(":checked"),

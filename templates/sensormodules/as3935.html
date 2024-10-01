@@ -1,0 +1,191 @@
+<div data-role="popup" id="popup_sensor_module_as3935" data-position-to="window" data-transition="flip" data-theme="a" and data-overlay-theme="a" data-dismissible="true" class="ui-content">
+	<form id="form_as3935">
+		<h3 class="boxtitle ui-title">
+			<span style="vertical-align:middle"><img src="./images/chip_title_32.png"></span>
+			<TMPL_VAR SENSORS.LABEL_TITLE_SENSORMODULE>: as3935
+		</h3>
+
+		<div class="box">
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR COMMON.LABEL_NAME>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="text" id="name_as3935" data-mini="true" value="" placeholder="<TMPL_VAR COMMON.LABEL_NAME_HINT>">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR INPUTS.LABEL_PIN>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="pin_as3935" id="pin_as3935" data-mini="true">
+							<option value="2">GPIO2</option>
+							<option value="3">GPIO3</option>
+							<option value="4">GPIO4</option>
+							<option value="5">GPIO5</option>
+							<option value="6">GPIO6</option>
+							<option value="7">GPIO7</option>
+							<option value="8">GPIO8</option>
+							<option value="9">GPIO9</option>
+							<option value="10">GPIO10</option>
+							<option value="11">GPIO11</option>
+							<option value="12">GPIO12</option>
+							<option value="13">GPIO13</option>
+							<option value="14">GPIO14</option>
+							<option value="15">GPIO15</option>
+							<option value="16">GPIO16</option>
+							<option value="17">GPIO17</option>
+							<option value="18">GPIO18</option>
+							<option value="19">GPIO19</option>
+							<option value="20">GPIO20</option>
+							<option value="21">GPIO21</option>
+							<option value="22">GPIO22</option>
+							<option value="23">GPIO23</option>
+							<option value="24">GPIO24</option>
+							<option value="25">GPIO25</option>
+							<option value="26">GPIO26</option>
+							<option value="27">GPIO27</option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_AUTOFILTER>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="auto_filter_as3935" id="auto_filter_as3935" data-mini="true">
+							<option value="True" selected><TMPL_VAR COMMON.LABEL_ENABLED></option>
+							<option value="False"><TMPL_VAR COMMON.LABEL_DISABLED></option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_INDOOR>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="indoor_as3935" id="indoor_as3935" data-mini="true">
+							<option value="True" selected><TMPL_VAR SENSORS.LABEL_INDOORS></option>
+							<option value="False"><TMPL_VAR SENSORS.LABEL_OUTDOORS></option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_MASKDISTURBER>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="mask_disturber_as3935" id="mask_disturber_as3935" data-mini="true">
+							<option value="True" selected><TMPL_VAR COMMON.LABEL_ENABLED></option>
+							<option value="False"><TMPL_VAR COMMON.LABEL_DISABLED></option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_LIGHTNINGTHRESHOLD>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="lightning_threshold_as3935" id="lightning_threshold_as3935" data-mini="true">
+							<option value="1" selected>1</option>
+							<option value="5">5</option>
+							<option value="9">9</option>
+							<option value="16">16</option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_WATCHDOGTHRESHOLD>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="watchdog_threshold_as3935" id="watchdog_threshold_as3935" data-mini="true">
+							<option value="1">1</option>
+							<option value="2" selected>2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_NOISELEVEL>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="noise_level_as3935" id="noise_level_as3935" data-mini="true">
+							<option value="1">1</option>
+							<option value="2" selected>2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_SPIKEREJECTION>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="spike_rejection_as3935" id="spike_rejection_as3935" data-mini="true">
+							<option value="1">1</option>
+							<option value="2" selected>2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+							<option value="11">11</option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_DIVISIONRATIO>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<select name="division_ratio_as3935" id="division_ratio_as3935" data-mini="true">
+							<option value="16" selected>16</option>
+							<option value="32">32</option>
+							<option value="64">64</option>
+							<option value="128">128</option>
+						</select>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 15%">
+						<TMPL_VAR SENSORS.LABEL_TUNECAP>
+					</div>
+					<div class="boxitem" style="width:75%">
+						<input type="range" name="tune_cap_as3935" id="tune_cap_as3935" value="0" min="0" max="120" step="1">
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<input type="hidden" id="edit_as3935" value="">
+						<input type="hidden" id="module_as3935" value="as3935">
+						<a href="#" onclick="add_sensormodule('as3935'); return false;" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-check ui-corner-all"><TMPL_VAR "COMMON.BUTTON_SAVE"></a>
+						<a href="#" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-delete ui-corner-all" data-rel="back"><TMPL_VAR COMMON.BUTTON_CANCEL></a>
+						&nbsp;&nbsp;<a href="#" onclick="window.open('./scan_i2c.cgi', 'NewWindow1','scrollbars=true,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no,width=800,height=600')" class="ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-icon-search ui-corner-all"><TMPL_VAR "GPIOS.BUTTON_SCANBUS"></a>
+					</div>
+			</div>
+			<div class="boxrow">
+					<div class="boxitem small" style="width: 90%">
+						<span id="savinghint_as3935">&nbsp;</span>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+
