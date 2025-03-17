@@ -67,7 +67,27 @@ else
 fi 
 
 echo "<INFO> Start installing Python Modules..."
-yes | python3 -m pip install --upgrade RPi.GPIO pcf8575 pcf8574 adafruit_circuitpython_mcp230xx adafruit-circuitpython-ads1x15 adafruit-circuitpython-ahtx0 smbus2 RPi.bme280 bme680 w1thermsensor pi-ina219 adafruit-mcp3008 gpiozero adafruit-circuitpython-ens160 Adafruit-BMP plantower adafruit-circuitpython-sht4x adafruit-circuitpython-veml7700 adafruit-circuitpython-tsl2561 sparkfun_qwiicas3935
+yes | python3 -m pip install --upgrade RPi.GPIO 
+yes | python3 -m pip install --upgrade smbus2 
+yes | python3 -m pip install --upgrade gpiozero 
+yes | python3 -m pip install --upgrade pcf8575 
+yes | python3 -m pip install --upgrade pcf8574 
+yes | python3 -m pip install --upgrade adafruit_circuitpython_mcp230xx 
+yes | python3 -m pip install --upgrade adafruit-circuitpython-ads1x15 
+yes | python3 -m pip install --upgrade adafruit-circuitpython-ahtx0 
+yes | python3 -m pip install --upgrade adafruit-circuitpython-ens160 
+yes | python3 -m pip install --upgrade adafruit-circuitpython-sht4x 
+yes | python3 -m pip install --upgrade adafruit-circuitpython-veml7700 
+yes | python3 -m pip install --upgrade adafruit-circuitpython-tsl2561 
+yes | python3 -m pip install --upgrade sparkfun-circuitpython-qwiicas3935
+yes | python3 -m pip install --upgrade adafruit-mcp3008 
+yes | python3 -m pip install --upgrade Adafruit-BMP 
+yes | python3 -m pip install --upgrade Adafruit_DHT
+yes | python3 -m pip install --upgrade RPi.bme280 
+yes | python3 -m pip install --upgrade bme680 
+yes | python3 -m pip install --upgrade w1thermsensor 
+yes | python3 -m pip install --upgrade pi-ina219 
+yes | python3 -m pip install --upgrade plantower 
 
 # SPecial handling because Module is too old...
 yes | python3 -m pip install "setuptools<58.0.0" wheel
@@ -75,25 +95,25 @@ yes | python3 -m pip install adxl345
 yes | python3 -m pip install setuptools
 
 # Following packages are for some special boards only
-if [ -e /boot/dietpi/.hw_model ]; then
-	. /boot/dietpi/.hw_model
-else # Old installations are from Raspbian, so we are definetely on a Rapsberry
-	G_HW_MODEL=9
-fi
-if [ $G_HW_MODEL -lt 10 ]; then # Raspberrys
-	yes | python3 -m pip install --upgrade Adafruit_DHT
-fi
+#if [ -e /boot/dietpi/.hw_model ]; then
+#	. /boot/dietpi/.hw_model
+#else # Old installations are from Raspbian, so we are definetely on a Rapsberry
+#	G_HW_MODEL=9
+#fi
+#if [ $G_HW_MODEL -lt 10 ]; then # Raspberrys
+#	yes | python3 -m pip install --upgrade Adafruit_DHT
+#fi
 
 echo "<INFO> Adjusting permissions..."
 chown root:root $PBIN/upgrade.sh
 chmod 0755 $PBIN/upgrade.sh
 
-echo "<INFO> Installing new Sensor Modules until they are available in the official repo..."
-if [ -e /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor ]; then
-	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/refs/heads/veml7700/mqtt_io/modules/sensor/veml7700.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/veml7700.py
-	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/refs/heads/as3935/mqtt_io/modules/sensor/as3935.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/as3935.py
-else
-	echo "<WARNING> No DietPi with Bookworm installation. Will not install additional modules."
-fi
+#echo "<INFO> Installing new Sensor Modules until they are available in the official repo..."
+#if [ -e /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor ]; then
+#	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/refs/heads/veml7700/mqtt_io/modules/sensor/veml7700.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/veml7700.py
+#	wget https://raw.githubusercontent.com/mschlenstedt/mqtt-io/refs/heads/as3935/mqtt_io/modules/sensor/as3935.py -O /usr/local/lib/python3.11/dist-packages/mqtt_io/modules/sensor/as3935.py
+#else
+#	echo "<WARNING> No DietPi with Bookworm installation. Will not install additional modules."
+#fi
 
 exit 0
