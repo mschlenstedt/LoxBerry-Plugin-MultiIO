@@ -67,6 +67,7 @@ else
 fi 
 
 echo "<INFO> Start installing Python Modules..."
+yes | python3 -m pip install setuptools
 yes | python3 -m pip install --upgrade RPi.GPIO 
 yes | python3 -m pip install --upgrade smbus2 
 yes | python3 -m pip install --upgrade gpiozero 
