@@ -67,7 +67,7 @@ else
 fi 
 
 echo "<INFO> Start installing Python Modules..."
-yes | python3 -m pip install --upgrade setuptools
+yes | python3 -m pip install --upgrade 'setuptools>=65,<70'
 yes | python3 -m pip install --upgrade RPi.GPIO 
 yes | python3 -m pip install --upgrade smbus2 
 yes | python3 -m pip install --upgrade gpiozero 
@@ -93,7 +93,7 @@ yes | python3 -m pip install --upgrade plantower
 # SPecial handling because Module is too old...
 yes | python3 -m pip install "setuptools<58.0.0" wheel
 yes | python3 -m pip install adxl345
-yes | python3 -m pip install --upgrade setuptools
+yes | python3 -m pip install --upgrade 'setuptools>=65,<70'
 
 # Following packages are for some special boards only
 #if [ -e /boot/dietpi/.hw_model ]; then
